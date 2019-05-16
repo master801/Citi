@@ -1,1 +1,547 @@
-/home/Master/Documents/Enigma/Mappings/Towns_14e.mapping
+CLASS xaos/c/a
+CLASS xaos/d/b
+	FIELD a source Ljava/lang/String;
+	FIELD b destination Ljava/lang/String;
+	FIELD c terrian Ljava/lang/String;
+	FIELD d pct I
+	FIELD e radius I
+	FIELD f heightMin I
+	FIELD g heightMax I
+CLASS xaos/d/f
+	FIELD a pointX Ljava/lang/String;
+	FIELD b pointY Ljava/lang/String;
+	FIELD c startingPointID Ljava/lang/String;
+	FIELD d nums I
+	FIELD e turns I
+	FIELD f northPCT I
+	FIELD g southPCT I
+	FIELD h eastPCT I
+	FIELD i westPCT I
+	FIELD j flatsBetweenLevels I
+CLASS xaos/d/h xaos/d/ID
+	FIELD a ID_ADD Ljava/lang/String;
+	FIELD b ID_ENTITY Ljava/lang/String;
+	FIELD c ID_QTTY Ljava/lang/String;
+	FIELD d ID_POINT_X Ljava/lang/String;
+	FIELD e ID_POINT_Y Ljava/lang/String;
+	FIELD f ID_LEVEL Ljava/lang/String;
+CLASS xaos/d/j
+	METHOD a getFluidTileType (Ljava/lang/String;)I
+		ARG 0 id
+CLASS xaos/d/l
+	FIELD a type Ljava/lang/String;
+	FIELD b level Ljava/lang/String;
+	FIELD c pointX Ljava/lang/String;
+	FIELD d pointY Ljava/lang/String;
+	FIELD e id Ljava/lang/String;
+	FIELD f startingPointID Ljava/lang/String;
+	FIELD g num I
+	FIELD h turns I
+	FIELD i northPCT I
+	FIELD j southPCT I
+	FIELD k eastPCT I
+	FIELD l westPCT I
+	FIELD m upPCT I
+	FIELD n downPCT I
+	FIELD o heightMin I
+	FIELD p heightMax I
+CLASS xaos/e/a xaos/skills/SkillEffect
+	FIELD a name Ljava/lang/String;
+	FIELD b statusFlag I
+	METHOD a getName ()Ljava/lang/String;
+	METHOD a setName (Ljava/lang/String;)V
+	METHOD b getStatusFlag ()I
+	METHOD b setStatusFlagFromID (Ljava/lang/String;)V
+		ARG 0 id
+CLASS xaos/e/b xaos/skills/SkillManager
+	FIELD a SKILLS Ljava/util/HashMap;
+	METHOD a resetSkills ()V
+	METHOD a getSkill (Ljava/lang/String;)Lxaos/e/c;
+	METHOD a loadSkills (Ljava/lang/String;Z)V
+CLASS xaos/e/c xaos/skills/Skill
+	FIELD c flag I
+	METHOD c getFlag ()I
+	METHOD c setFlagFromName (Ljava/lang/String;)V
+CLASS xaos/Towns xaos/Towns
+	FIELD a PROPERTIES_MAIN Ljava/util/Properties;
+	FIELD b PROPERTIES_GRAPHICS Ljava/util/Properties;
+	METHOD a getPropertiesGraphics ()Ljava/util/Properties;
+	METHOD a getProperty (Ljava/lang/String;)Ljava/lang/String;
+	METHOD a getPropertyAsInt (Ljava/lang/String;I)I
+	METHOD a getPropertyAsInt (Lxaos/property/PropertyFile;Ljava/lang/String;)I
+		ARG 0 propertyFile
+	METHOD a getPropertyAsInt (Lxaos/property/PropertyFile;Ljava/lang/String;I)I
+	METHOD a serializeObject (Lxaos/property/b;Ljava/lang/Object;)Ljava/lang/Object;
+	METHOD b clearPropertiesGraphics ()V
+	METHOD b initSteamApi (Ljava/lang/String;)Z
+		ARG 0 name
+	METHOD b getPropertyDefault (Lxaos/property/PropertyFile;Ljava/lang/String;)Ljava/lang/String;
+	METHOD c loadPropertiesGraphics ()V
+	METHOD main main ([Ljava/lang/String;)V
+		ARG 0 array
+CLASS xaos/data/b
+	FIELD a listFriendly Ljava/util/ArrayList;
+	FIELD b listAllies Ljava/util/ArrayList;
+	FIELD c listEnemies Ljava/util/ArrayList;
+	FIELD d listHeroes Ljava/util/ArrayList;
+	FIELD e listPlebs Ljava/util/ArrayList;
+	FIELD f isFriendly Z
+	FIELD g isAlly Z
+	FIELD h isEnemy Z
+	FIELD i isHero Z
+	FIELD j isPleb Z
+CLASS xaos/main/a xaos/main/TownsMain
+	FIELD K MODS Ljava/util/ArrayList;
+	FIELD f textureID I
+	FIELD m getScreenshotsDirectory Ljava/lang/String;
+	FIELD n fileSeparator Ljava/lang/String;
+	FIELD u enableMusic Z
+	FIELD v enableFx Z
+	METHOD H getMods ()Ljava/util/ArrayList;
+	METHOD I getModsAsString ()Ljava/lang/String;
+	METHOD N exit ()V
+	METHOD P handleMouseInput ()V
+	METHOD Q handleKeyInputs ()V
+	METHOD R gameLoop ()V
+	METHOD S createScreenshot ()V
+	METHOD T checkForDuplicateMods ()V
+	METHOD a findTextureFiles ()V
+	METHOD a showTutorial (IILxaos/utils/Point3D;)V
+	METHOD a showTutorial (IILxaos/utils/Point3D;Ljava/lang/String;)V
+	METHOD a showTutorial (IILxaos/utils/Point3D;Ljava/lang/String;Z)V
+	METHOD a showTutorial (IZ)V
+	METHOD a saveGameToFile (Ljava/lang/String;Ljava/lang/String;)V
+	METHOD b getMainDirectory ()Ljava/lang/String;
+	METHOD b hasMod (Ljava/lang/String;)Z
+		ARG 0 modName
+	METHOD c getFilePathSeparator ()Ljava/lang/String;
+	METHOD c addMod (Ljava/lang/String;)V
+		ARG 0 modName
+	METHOD e (Z)V
+		ARG 0 enableMusic
+	METHOD f findMods (Ljava/lang/String;)V
+		ARG 0 path
+	METHOD f (Z)V
+		ARG 0 enableFx
+CLASS xaos/utils/a
+	METHOD run run ()V
+CLASS xaos/utils/d xaos/utils/ImageFile
+	FIELD d rgbData Ljava/nio/ByteBuffer;
+	METHOD e getPixelData ()Ljava/nio/ByteBuffer;
+	METHOD f clearPixels ()V
+CLASS xaos/utils/f xaos/utils/TownsClassLoader
+	FIELD a startFile Ljava/io/File;
+	METHOD findResource findResource (Ljava/lang/String;)Ljava/net/URL;
+		ARG 0 url
+CLASS xaos/utils/g xaos/utils/LanguageManager
+	FIELD a resourceBundle Ljava/util/ResourceBundle;
+	METHOD a getString (Ljava/lang/String;)Ljava/lang/String;
+		ARG 0 id
+CLASS xaos/utils/h xaos/utils/NameManager
+	FIELD a NAMES Ljava/util/HashMap;
+	METHOD a addName (Ljava/lang/String;)V
+	METHOD a getName (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+CLASS xaos/utils/m xaos/utils/GraphicsFile
+	FIELD a textureID I
+	METHOD g getTextureID ()I
+CLASS xaos/utils/n xaos/utils/FontManager
+	FIELD a width S
+	FIELD b height S
+CLASS xaos/utils/o xaos/utils/DataManager
+	FIELD a classLoader Lxaos/utils/f;
+	FIELD b rand Ljava/util/Random;
+	METHOD a getAllNameXmlFiles (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/util/ArrayList;
+	METHOD c getColor (Ljava/lang/String;)Lxaos/utils/ColorGL;
+		ARG 0 upperCase
+	METHOD d readConfigs ()V
+	METHOD e getExistingLanguageFiles ()Ljava/util/ArrayList;
+	METHOD h initFolders (Ljava/lang/String;)Ljava/io/File;
+	METHOD l getResourceBundle (Ljava/lang/String;)Ljava/util/ResourceBundle;
+		ARG 0 locale
+CLASS xaos/utils/p xaos/utils/GLManager
+	FIELD e GRAPHIC_FILES Ljava/util/HashMap;
+	FIELD g displayWidth I
+	FIELD h displayHeight I
+	METHOD a initDisplay ()V
+	METHOD a setDisplay (IIZ)V
+		ARG 2 fullscreen
+	METHOD a readPNGFile (Ljava/lang/String;Ljava/lang/String;)Lxaos/utils/d;
+		ARG 0 imageFilePath
+	METHOD a getGraphicsFile (Ljava/lang/String;Z)Lxaos/utils/d;
+	METHOD a (Lxaos/utils/d;II)V
+		ARG 1 textureID
+	METHOD b isFullscreen ()Z
+	METHOD b setDisplayDimensions (IIZ)V
+		ARG 0 displayWidth
+		ARG 1 displayHeight
+	METHOD b readImageFile (Ljava/lang/String;Ljava/lang/String;)Lxaos/utils/d;
+		ARG 0 imageFilePath
+	METHOD b (Lxaos/utils/m;)V
+	METHOD c setDisplay ()V
+	METHOD d getDisplayWidth ()I
+	METHOD e getDisplayHeight ()I
+	METHOD f getWidth ()I
+	METHOD g getHeight ()I
+	METHOD l stop ()V
+	METHOD m getDisplayMode ()Lorg/lwjgl/opengl/DisplayMode;
+	METHOD n initCursorImage ()V
+CLASS xaos/utils/r xaos/utils/KeysManager
+	FIELD a KEY_IDS [Ljava/lang/String;
+	FIELD b KEY_NAMES [Ljava/lang/String;
+	FIELD c KEYS [[I
+	METHOD a initKeys ()V
+CLASS xaos/actions/a
+	METHOD a log (ILjava/lang/String;Ljava/lang/String;)V
+		ARG 0 level
+		ARG 1 message
+		ARG 2 id
+CLASS xaos/data/Type
+	FIELD serialVersionUID serialVersionUID J
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+		ARG 0 objectInput
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+		ARG 0 objectOutput
+CLASS xaos/main/World
+	FIELD serialVersionUID serialVersionUID J
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+		ARG 0 objectInput
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+		ARG 0 objectOutput
+CLASS xaos/property/a xaos/property/Properties
+	FIELD a PROPERTY_WINDOW_WIDTH Lxaos/property/b;
+	FIELD b PROPERTY_WINDOW_HEIGHT Lxaos/property/b;
+	FIELD c PROPERTY_FULLSCREEN Lxaos/property/b;
+	FIELD d PROPERTY_MUSIC Lxaos/property/b;
+	FIELD e PROPERTY_VOLUME_MUSIC Lxaos/property/b;
+	FIELD f PROPERTY_FX Lxaos/property/b;
+	FIELD g PROPERTY_VOLUME_FX Lxaos/property/b;
+	FIELD h PROPERTY_AUTOSAVE_DAYS Lxaos/property/b;
+	FIELD i PROPERTY_MOUSE_SCROLL Lxaos/property/b;
+	FIELD j PROPERTY_SCROLL_EARS Lxaos/property/b;
+	FIELD k PROPERTY_MOUSE_2D_CUBES Lxaos/property/b;
+	FIELD l PROPERTY_DISABLE_ITEMS Lxaos/property/b;
+	FIELD m PROPERTY_DISABLE_GODS Lxaos/property/b;
+	FIELD n PROPERTY_PAUSE_START Lxaos/property/b;
+	FIELD o PROPERTY_SIEGES Lxaos/property/b;
+	FIELD p PROPERTY_SIEGE_PAUSE Lxaos/property/b;
+	FIELD q PROPERTY_ALLOW_CARAVAN_PAUSE Lxaos/property/b;
+	FIELD r PROPERTY_ALLOW_BURIALS Lxaos/property/b;
+	FIELD s PROPERTY_PATHFINDING_LEVEL Lxaos/property/b;
+	FIELD t PROPERTY_MODS Lxaos/property/b;
+	FIELD u PROPERTY_SERVERS Lxaos/property/b;
+CLASS xaos/property/b xaos/property/PropertyEntry
+CLASS xaos/property/c xaos/property/PropertySerialize
+	METHOD a deserialize (Ljava/lang/Object;)Ljava/lang/String;
+	METHOD a serialize (Ljava/lang/String;)Ljava/lang/Object;
+CLASS xaos/tasks/Task
+	FIELD c type I
+	FIELD serialVersionUID serialVersionUID J
+	METHOD a (I)V
+		ARG 0 type
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+		ARG 0 objectInput
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+		ARG 0 objectOutput
+CLASS xaos/tiles/Cell
+	FIELD serialVersionUID serialVersionUID J
+	METHOD B isTransparent ()Z
+CLASS xaos/tiles/Tile
+	FIELD c color Lxaos/utils/ColorGL;
+	FIELD d xPos B
+	FIELD e yPos B
+	FIELD j xRot B
+	FIELD k yRot B
+	FIELD p width S
+	FIELD q widthOffset S
+	FIELD r height S
+	FIELD s heightOffset S
+	FIELD serialVersionUID serialVersionUID J
+	METHOD c setHeight (I)V
+		ARG 0 height
+	METHOD d getColor ()Lxaos/utils/ColorGL;
+	METHOD e getXPos ()I
+	METHOD f getYPos ()I
+	METHOD o getWidth ()I
+	METHOD p getWidthOffset ()I
+	METHOD q getHeight ()I
+	METHOD r getHeightOffset ()I
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+	METHOD y getPath ()Ljava/lang/String;
+CLASS xaos/utils/Date
+	FIELD serialVersionUID serialVersionUID J
+CLASS xaos/zones/Zone
+	FIELD serialVersionUID serialVersionUID J
+CLASS xaos/property/a/a xaos/property/serialize/PropertySerializeBoolean
+	FIELD a INSTANCE Lxaos/property/a/a;
+	METHOD a deserialize (Ljava/lang/Object;)Ljava/lang/String;
+	METHOD a serialize (Ljava/lang/String;)Ljava/lang/Object;
+	METHOD b asBoolean (Ljava/lang/String;)Ljava/lang/Boolean;
+CLASS xaos/property/a/b xaos/property/serialize/PropertySerializeInt
+	FIELD a INSTANCE Lxaos/property/a/b;
+	METHOD a deserialize (Ljava/lang/Object;)Ljava/lang/String;
+	METHOD a serialize (Ljava/lang/String;)Ljava/lang/Object;
+	METHOD b asInt (Ljava/lang/String;)Ljava/lang/Integer;
+CLASS xaos/property/a/c xaos/property/serialize/c
+	METHOD a deserialize (Ljava/lang/Object;)Ljava/lang/String;
+	METHOD a serialize (Ljava/lang/String;)Ljava/lang/Object;
+CLASS xaos/data/BuryData
+	FIELD serialVersionUID serialVersionUID J
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+		ARG 0 objectInput
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+		ARG 0 objectOutput
+CLASS xaos/data/HeroData
+	FIELD a task Lxaos/tiles/entities/living/heroes/HeroTask;
+	FIELD b behavior Lxaos/tiles/entities/living/heroes/HeroBehaviour;
+	FIELD serialVersionUID serialVersionUID J
+	METHOD a getTask ()Lxaos/tiles/entities/living/heroes/HeroTask;
+	METHOD a setTask (Lxaos/tiles/entities/living/heroes/HeroTask;)V
+	METHOD b getBehaviour ()Lxaos/tiles/entities/living/heroes/HeroBehaviour;
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+		ARG 0 objectInput
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+		ARG 0 objectOutput
+CLASS xaos/utils/ColorGL xaos/utils/ColorGL
+	FIELD a COLOR_BLACK Lxaos/utils/ColorGL;
+	FIELD b COLOR_WHITE Lxaos/utils/ColorGL;
+	FIELD c COLOR_GREEN Lxaos/utils/ColorGL;
+	FIELD d COLOR_RED Lxaos/utils/ColorGL;
+	FIELD e COLOR_YELLOW Lxaos/utils/ColorGL;
+	FIELD f COLOR_ORANGE Lxaos/utils/ColorGL;
+	FIELD g COLOR_LIGHT_GRAY Lxaos/utils/ColorGL;
+	FIELD h red F
+	FIELD i green F
+	FIELD j blue F
+	FIELD serialVersionUID serialVersionUID J
+	METHOD <init> (FFF)V
+		ARG 0 red
+		ARG 1 green
+		ARG 2 blue
+	METHOD <init> (Ljava/awt/Color;)V
+		ARG 0 color
+	METHOD a clone ()Ljava/awt/Color;
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+		ARG 0 objectInput
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+		ARG 0 objectOutput
+CLASS xaos/utils/Point3D xaos/utils/Point3D
+	FIELD a x I
+	FIELD b y I
+	FIELD c z I
+	FIELD serialVersionUID serialVersionUID J
+	METHOD <init> (III)V
+		ARG 0 x
+		ARG 1 y
+		ARG 2 z
+	METHOD a asShort ()Lxaos/utils/Point3DShort;
+	METHOD a setCoords (III)V
+		ARG 0 x
+		ARG 1 y
+		ARG 2 z
+	METHOD a equals (Lxaos/utils/Point3DShort;)Z
+		ARG 0 point3DShort
+	METHOD equals (Ljava/lang/Object;)Z
+		ARG 0 object
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+		ARG 0 objectInput
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+		ARG 0 objectOutput
+CLASS xaos/data/EventData
+	FIELD h EVENTS Ljava/util/HashMap;
+	FIELD serialVersionUID serialVersionUID J
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+		ARG 0 objectInput
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+		ARG 0 objectOutput
+CLASS xaos/data/SiegeData
+	FIELD serialVersionUID serialVersionUID J
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+		ARG 0 objectInput
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+		ARG 0 objectOutput
+CLASS xaos/data/SkillData
+	FIELD serialVersionUID serialVersionUID J
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+		ARG 0 objectInput
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+		ARG 0 objectOutput
+CLASS xaos/tasks/HotPoint
+	FIELD serialVersionUID serialVersionUID J
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+		ARG 0 objectInput
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+		ARG 0 objectOutput
+CLASS xaos/utils/AStarNodo
+	FIELD serialVersionUID serialVersionUID J
+CLASS xaos/data/EquippedData
+	FIELD serialVersionUID serialVersionUID J
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+		ARG 0 objectInput
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+		ARG 0 objectOutput
+CLASS xaos/tasks/TaskManager
+	FIELD serialVersionUID serialVersionUID J
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+		ARG 0 objectInput
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+		ARG 0 objectOutput
+CLASS xaos/utils/JNASteamAPI xaos/utils/JNASteamAPI
+	METHOD SteamAPI_Init SteamAPI_Init ()Z
+CLASS xaos/utils/UtilsServer
+	METHOD a (Ljava/lang/String;)Ljava/lang/String;
+		ARG 0 url
+	METHOD b sanitizeUrl (Ljava/lang/String;)Ljava/lang/String;
+		ARG 0 url
+	METHOD b readFromUrl (Ljava/lang/String;Ljava/lang/String;)Z
+		ARG 0 url
+		ARG 1 filePath
+	METHOD main main ([Ljava/lang/String;)V
+		ARG 0 args
+CLASS xaos/utils/Point3DShort xaos/utils/Point3DShort
+	FIELD a x S
+	FIELD b y S
+	FIELD c z S
+	FIELD serialVersionUID serialVersionUID J
+	METHOD <init> (SSS)V
+		ARG 0 x
+		ARG 1 y
+		ARG 2 z
+	METHOD a setCoords (III)V
+		ARG 0 x
+		ARG 1 y
+		ARG 2 z
+	METHOD a equals (Lxaos/utils/Point3D;)Z
+		ARG 0 point3D
+	METHOD a setCoords (Lxaos/utils/Point3DShort;)V
+		ARG 0 point3DShort
+	METHOD a setCoords (SSS)V
+		ARG 0 x
+		ARG 1 y
+		ARG 2 z
+	METHOD b clone (Lxaos/utils/Point3DShort;)Lxaos/utils/Point3DShort;
+		ARG 0 point3DShort
+	METHOD b (SSS)Lxaos/utils/Point3DShort;
+	METHOD equals (Ljava/lang/Object;)Z
+		ARG 0 object
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+		ARG 0 objectInput
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+		ARG 0 objectOutput
+CLASS xaos/campaign/MissionData
+	FIELD serialVersionUID serialVersionUID J
+CLASS xaos/data/GlobalEventData
+	FIELD serialVersionUID serialVersionUID J
+	METHOD d getRed ()F
+	METHOD e getGreen ()F
+	METHOD f getBlue ()F
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+		ARG 0 objectInput
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+		ARG 0 objectOutput
+CLASS xaos/stockpiles/Stockpile
+	FIELD c type Lxaos/data/Type;
+	FIELD serialVersionUID serialVersionUID J
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+		ARG 0 objectInput
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+		ARG 0 objectOutput
+CLASS xaos/campaign/TutorialFlow
+	FIELD serialVersionUID serialVersionUID J
+CLASS xaos/data/HeroPrerequisite
+	FIELD a flag I
+	FIELD serialVersionUID serialVersionUID J
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+		ARG 0 objectInput
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+		ARG 0 objectOutput
+CLASS xaos/data/LivingEntityData
+	FIELD serialVersionUID serialVersionUID J
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+		ARG 0 objectInput
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+		ARG 0 objectOutput
+CLASS xaos/data/SoldierGroupData
+	FIELD serialVersionUID serialVersionUID J
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+		ARG 0 objectInput
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+		ARG 0 objectOutput
+CLASS xaos/property/PropertyFile xaos/property/PropertyFile
+	FIELD a PROPERTY_FILE_MAIN Lxaos/property/PropertyFile;
+	FIELD b PROPERTY_FILE_GRAPHICS Lxaos/property/PropertyFile;
+	FIELD c VALUES [Lxaos/property/PropertyFile;
+	METHOD values values ()[Lxaos/property/PropertyFile;
+CLASS xaos/tiles/entities/Entity
+	FIELD a pos Lxaos/utils/Point3DShort;
+	FIELD serialVersionUID serialVersionUID J
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+		ARG 0 objectInput
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+		ARG 0 objectOutput
+CLASS xaos/tiles/terrain/Terrain
+	FIELD serialVersionUID serialVersionUID J
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+		ARG 0 objectInput
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+		ARG 0 objectOutput
+CLASS xaos/panels/menus/SmartMenu
+	FIELD serialVersionUID serialVersionUID J
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+		ARG 0 objectInput
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+		ARG 0 objectOutput
+CLASS xaos/tiles/entities/living/b
+	METHOD b getType ()I
+CLASS xaos/campaign/TutorialTrigger
+	METHOD b getId ()Ljava/lang/String;
+CLASS xaos/tiles/entities/items/Item
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+CLASS xaos/tiles/entities/buildings/a xaos/tiles/entities/buildings/BuildingsManager
+	FIELD a buildings Ljava/util/HashMap;
+CLASS xaos/tiles/entities/living/Citizen
+	FIELD a citizenData Lxaos/data/CitizenData;
+	FIELD b soldierData Lxaos/data/SoldierData;
+	FIELD c task Lxaos/tasks/Task;
+	FIELD f action Lxaos/actions/Action;
+	FIELD serialVersionUID serialVersionUID J
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+		ARG 0 objectInput
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+		ARG 0 objectOutput
+CLASS xaos/tiles/entities/items/military/b
+	METHOD a ()Lxaos/tiles/entities/items/military/PrefixSuffixData;
+CLASS xaos/caravans/CaravanItemDataInstance
+	FIELD serialVersionUID serialVersionUID J
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+		ARG 0 objectInput
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+		ARG 0 objectOutput
+CLASS xaos/tiles/entities/buildings/Building
+	FIELD serialVersionUID serialVersionUID J
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+		ARG 0 objectInput
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+		ARG 0 objectOutput
+CLASS xaos/tiles/entities/living/allies/Ally
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+CLASS xaos/tiles/entities/living/heroes/Hero
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+CLASS xaos/tiles/entities/living/LivingEntity
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+CLASS xaos/tiles/entities/living/enemies/Enemy
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+CLASS xaos/tiles/entities/living/friendly/Friendly
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+CLASS xaos/tiles/entities/items/military/MilitaryItem
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+CLASS xaos/tiles/entities/living/projectiles/Projectile
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
