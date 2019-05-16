@@ -1,0 +1,72 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = 'sonatype'
+            url = 'https://oss.sonatype.org/content/repositories/snapshots/'
+        }
+        maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
+    }
+}
+repositories {
+    mavenCentral()
+    maven {
+        url = 'https://jitpack.io'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+sourceCompatibility = targetCompatibility = '1.8'
+
+version = project.properties['version']
+group = 'org.slave.lib'
+archivesBaseName = 'Citi'
+
+jar {
+    manifest {
+        attributes 'Premain-Class': 'org.slave.citi.Agent'
+		attributes 'Can-Redefine-Classes': 'true'
+		attributes 'Can-Retransform-Classes': 'true'
+		attributes 'Created-By': 'Master801'
+    }
+}
+
+idea {
+    workspace {
+        //TODO Add run configuration
+    }
+}
+
+dependencies {
+    compile(
+            group: 'org.ow2.asm',
+            name: 'asm-debug-all',
+            version: project.properties['asm-version']
+    )
+
+    implementation fileTree(
+            dir: 'libs',
+            exclude: [
+                '*-src.jar'
+            ],
+            include: [
+                    'jna.jar',
+                    'lwjgl.jar',
+                    'lwjgl_util.jar',
+                    'platform.jar',
+                    'pngdecoder.jar',
+                    'slick-util.jar'
+            ]
+    )
+
+    implementation fileTree(
+            dir: 'depend',
+            include: [
+                    'xaos.jar'
+            ]
+    )
+}
