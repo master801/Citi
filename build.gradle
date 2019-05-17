@@ -9,16 +9,27 @@ buildscript {
             url 'https://plugins.gradle.org/m2/'
         }
     }
+    dependencies {
+        classpath(
+                group: 'io.franzbecker',
+                name: 'gradle-lombok',
+                version: '1.8'
+        )
+    }
 }
 repositories {
     mavenCentral()
     maven {
         url = 'https://jitpack.io'
     }
+    maven {
+        url 'https://projectlombok.org/edge-releases'
+    }
 }
 
 apply plugin: 'java'
 apply plugin: 'idea'
+apply plugin: 'io.franzbecker.gradle-lombok'
 
 sourceCompatibility = targetCompatibility = '1.8'
 
@@ -47,6 +58,17 @@ dependencies {
             name: 'asm-debug-all',
             version: project.properties['asm-version']
     )
+    compile(
+            group: 'com.google.guava',
+            name: 'guava',
+            version: project.properties['guava-version']
+    )
+    compile(
+            group: 'commons-io',
+            name: 'commons-io',
+            version: '2.6'
+    )
+
 
     implementation fileTree(
             dir: 'libs',
