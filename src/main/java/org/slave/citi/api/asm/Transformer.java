@@ -1,4 +1,4 @@
-package org.slave.citi.asm;
+package org.slave.citi.api.asm;
 
 import java.io.File;
 import java.io.FileOutputStream;

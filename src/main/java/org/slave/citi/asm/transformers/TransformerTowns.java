@@ -8,7 +8,7 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
 import org.slave.citi.Citi;
-import org.slave.citi.asm.Transformer;
+import org.slave.citi.api.asm.Transformer;
 
 import java.io.File;
 import java.io.IOException;

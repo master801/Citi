@@ -120,6 +120,9 @@ CLASS xaos/d/b
 	FIELD e radius I
 	FIELD f heightMin I
 	FIELD g heightMax I
+CLASS xaos/d/c
+	METHOD a loadFrom (Ljava/lang/String;Lxaos/d/c;Z)Lxaos/d/c;
+	METHOD a parse (Ljava/util/ArrayList;Lorg/w3c/dom/Node;Z)V
 CLASS xaos/d/f
 	FIELD a pointX Ljava/lang/String;
 	FIELD b pointY Ljava/lang/String;
@@ -131,7 +134,7 @@ CLASS xaos/d/f
 	FIELD h eastPCT I
 	FIELD i westPCT I
 	FIELD j flatsBetweenLevels I
-CLASS xaos/d/h xaos/d/ID
+CLASS xaos/d/h
 	FIELD a ID_ADD Ljava/lang/String;
 	FIELD b ID_ENTITY Ljava/lang/String;
 	FIELD c ID_QTTY Ljava/lang/String;
@@ -238,15 +241,38 @@ CLASS xaos/data/b
 	FIELD i isHero Z
 	FIELD j isPleb Z
 CLASS xaos/main/a xaos/main/TownsMain
+	FIELD A disableGods Z
+	FIELD B pauseWhenStarted Z
+	FIELD C autosaveDays I
+	FIELD D sieges I
+	FIELD E allowSeigePause Z
+	FIELD F allowCaravanPause Z
+	FIELD G allowBurySystem Z
+	FIELD H volumeMusic I
+	FIELD I volumeFx I
 	FIELD K MODS Ljava/util/ArrayList;
 	FIELD L serverNames Ljava/util/ArrayList;
 	FIELD M serverURLs Ljava/util/ArrayList;
+	FIELD c fpgsMainMenu I
+	FIELD d fpsIngame I
 	FIELD f textureID I
 	FIELD h shouldCreateScreenshot Z
+	FIELD j task Lxaos/tasks/Task;
+	FIELD l missionData Lxaos/campaign/MissionData;
 	FIELD m userDirectory Ljava/lang/String;
 	FIELD n fileSeparator Ljava/lang/String;
+	FIELD t world Lxaos/main/World;
 	FIELD u enableMusic Z
 	FIELD v enableFx Z
+	FIELD w allowMouseScroll Z
+	FIELD x allowMouseScrollEdgeButtons Z
+	FIELD y allowMouseScrollHeightCubes Z
+	FIELD z disableItems Z
+	METHOD A shouldAllowBurySystem ()Z
+	METHOD B getVolumeMusic ()I
+	METHOD C setVolumeMusic ()V
+	METHOD D getVolumeFx ()I
+	METHOD E setVolumeFx ()V
 	METHOD H getMods ()Ljava/util/ArrayList;
 	METHOD I getModsAsString ()Ljava/lang/String;
 	METHOD J getServerNames ()Ljava/util/ArrayList;
@@ -264,21 +290,48 @@ CLASS xaos/main/a xaos/main/TownsMain
 	METHOD a showTutorial (IILxaos/utils/Point3D;Ljava/lang/String;Z)V
 	METHOD a showTutorial (IZ)V
 	METHOD a saveGameToFile (Ljava/lang/String;Ljava/lang/String;)V
+	METHOD a setMissionData (Lxaos/campaign/MissionData;)V
+	METHOD a setWorld (Lxaos/main/World;)V
 	METHOD b getMainDirectory ()Ljava/lang/String;
+	METHOD b setAutosaveDays (I)V
 	METHOD b hasMod (Ljava/lang/String;)Z
 		ARG 0 modName
 	METHOD c getFilePathSeparator ()Ljava/lang/String;
+	METHOD c setSieges (I)V
 	METHOD c addMod (Ljava/lang/String;)V
 		ARG 0 modName
+	METHOD d setPathfindingLevel (I)V
 	METHOD e enableMusic (Z)V
 		ARG 0 enableMusic
+	METHOD f getWorld ()Lxaos/main/World;
 	METHOD f findMods (Ljava/lang/String;)V
 		ARG 0 path
 	METHOD f enableFx (Z)V
 		ARG 0 enableFx
 	METHOD g setServers (Ljava/lang/String;)V
+	METHOD g setAllowMouseScroll (Z)V
+	METHOD h getTask ()Lxaos/tasks/Task;
+	METHOD h setAllowMouseScrollEdgeButtons (Z)V
+	METHOD i getMissionData ()Lxaos/campaign/MissionData;
+	METHOD i setAllowMouseScrollHeightCubes (Z)V
+	METHOD j setDisableItems (Z)V
+	METHOD k setDisableGods (Z)V
+	METHOD l setPauseWhenStarted (Z)V
+	METHOD m shouldAllowSeigePause (Z)V
+	METHOD n shouldAllowCaravanPause (Z)V
 	METHOD o isMusicEnabled ()Z
+	METHOD o shouldAllowBurySystem (Z)V
 	METHOD p isFxEnabled ()Z
+	METHOD q shouldAllowMouseScroll ()Z
+	METHOD r shouldAllowMouseScrollHeightCubs ()Z
+	METHOD s shouldAllowMouseScrollHeightCubes ()Z
+	METHOD t shouldDisableItems ()Z
+	METHOD u shouldDisableGods ()Z
+	METHOD v shouldPauseWhenStarted ()Z
+	METHOD w getAutosaveDays ()I
+	METHOD x getSieges ()I
+	METHOD y shouldAllowSeigePause ()Z
+	METHOD z shouldAllowCaravanPause ()Z
 CLASS xaos/utils/a
 	METHOD run run ()V
 CLASS xaos/utils/d xaos/utils/ImageFile
@@ -372,6 +425,16 @@ CLASS xaos/utils/p xaos/utils/GLManager
 	METHOD l stop ()V
 	METHOD m getDisplayMode ()Lorg/lwjgl/opengl/DisplayMode;
 	METHOD n initCursorImage ()V
+CLASS xaos/utils/q
+	FIELD a originalStrings Ljava/util/HashMap;
+	FIELD b strings Ljava/util/ArrayList;
+	FIELD c length I
+	METHOD a getString (I)Ljava/lang/String;
+	METHOD a addString (Ljava/lang/String;)I
+	METHOD a toIntArray (Ljava/util/ArrayList;)[I
+	METHOD a intArrayListContainsInt (Ljava/util/ArrayList;I)I
+	METHOD a containsInt ([II)Z
+	METHOD b splitString (Ljava/lang/String;)[I
 CLASS xaos/utils/r xaos/utils/KeysManager
 	FIELD a KEY_IDS [Ljava/lang/String;
 	FIELD b KEY_NAMES [Ljava/lang/String;
@@ -423,6 +486,8 @@ CLASS xaos/panels/d
 CLASS xaos/actions/a xaos/actions/ActionManager
 	FIELD a actionPriorityMap Ljava/util/HashMap;
 	FIELD b audio Ljava/util/HashMap;
+	METHOD a setMusicLevels (I)V
+	METHOD a setVolumeLevels (II)V
 	METHOD a log (ILjava/lang/String;Ljava/lang/String;)V
 		ARG 0 level
 		ARG 1 message
@@ -432,11 +497,17 @@ CLASS xaos/actions/a xaos/actions/ActionManager
 	METHOD a loadActionPriorities (Ljava/lang/String;Z)V
 	METHOD a parseQueue (Lorg/w3c/dom/NodeList;)Ljava/util/ArrayList;
 	METHOD a findAndGetValue (Lorg/w3c/dom/NodeList;Ljava/lang/String;)Ljava/lang/String;
+	METHOD b stopMusic ()V
+	METHOD b setSoundVolume (I)V
 	METHOD b playSoundFx (Ljava/lang/String;)V
 	METHOD b addAudioFile (Ljava/lang/String;Ljava/lang/String;)Z
 		ARG 0 name
 		ARG 1 filePath
 	METHOD b findAndGetValue (Lorg/w3c/dom/NodeList;Ljava/lang/String;)Ljava/util/ArrayList;
+	METHOD c stopFx ()V
+	METHOD c playAudio (Ljava/lang/String;)V
+	METHOD d resetAudio ()V
+	METHOD d containsAudio (Ljava/lang/String;)Z
 	METHOD e initAudio ()Z
 	METHOD e parseDocumentFromPath (Ljava/lang/String;)Lorg/w3c/dom/Document;
 		ARG 0 filePath
@@ -649,6 +720,12 @@ CLASS xaos/data/EventData
 		ARG 0 objectInput
 	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
 		ARG 0 objectOutput
+CLASS xaos/data/FocusData
+	FIELD serialVersionUID serialVersionUID J
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+		ARG 0 objectInput
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+		ARG 0 objectOutput
 CLASS xaos/data/SiegeData
 	FIELD serialVersionUID serialVersionUID J
 	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
@@ -762,6 +839,7 @@ CLASS xaos/utils/Point3DShort xaos/utils/Point3DShort
 	METHOD b clone (Lxaos/utils/Point3DShort;)Lxaos/utils/Point3DShort;
 		ARG 0 point3DShort
 	METHOD b (SSS)Lxaos/utils/Point3DShort;
+	METHOD d clone ()Lxaos/utils/Point3D;
 	METHOD equals (Ljava/lang/Object;)Z
 		ARG 0 object
 	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
