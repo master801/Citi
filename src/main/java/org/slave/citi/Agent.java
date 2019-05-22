@@ -4,6 +4,7 @@ import org.slave.citi.api.asm.Transformer;
 import org.slave.citi.asm.transformers.TransformerTowns;
 import org.slave.citi.asm.transformers.TransformerTownsMain;
 import org.slave.citi.deobfuscator.runtime.RuntimeDeobfuscation;
+import org.slave.citi.loader.asm.CitiASMLoader;
 
 import java.io.File;
 import java.lang.instrument.Instrumentation;
@@ -13,6 +14,7 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -32,7 +34,8 @@ public final class Agent {
     public static final Logger LOGGER_CITI_AGENT = Logger.getLogger("Citi-Agent");
 
     public static void premain(final String agentArguments, final Instrumentation instrumentation) {
-        System.out.println("Citi Agent version: " + CITI_AGENT_VERSION);
+        Agent.LOGGER_CITI_AGENT.log(Level.INFO, "Citi Agent version: " + CITI_AGENT_VERSION);
+        Citi.init();
         if (!Agent.loadLibraries()) {
             System.out.println("Could not load library files... not starting Citi...");
             return;
@@ -52,15 +55,22 @@ public final class Agent {
                         (loader, className, classBeingRedefined, protectionDomain, classfileBuffer) -> transformer.transform(className, className, classfileBuffer)
                 );
             } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
-                LOGGER_CITI_AGENT.info("Caught exception while adding transformer!");
-                LOGGER_CITI_AGENT.info("Exception: " + e.toString());
+                Agent.LOGGER_CITI_AGENT.info("Caught exception while adding transformer!");
+                Agent.LOGGER_CITI_AGENT.info("Exception: " + e.toString());
             }
+        }
+
+        CitiASMLoader.INSTANCE.sortTransformers();
+        try {
+            CitiASMLoader.INSTANCE.loadTransformers(instrumentation);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
+            CitiASMLoader.LOGGER_CITI_ASM.log(Level.SEVERE, "Failed to load transformer due to caught exception!", e);
         }
     }
 
     private static boolean loadLibraries() {
-        if (Citi.DIRECTORY_CITI_LIBS.exists()) {
-            File[] files = Citi.DIRECTORY_CITI_LIBS.listFiles((dir, name) -> name.trim().toLowerCase().endsWith(".jar"));
+        if (Citi.getDirectoryCitiLibs().exists()) {
+            File[] files = Citi.getDirectoryCitiLibs().listFiles((dir, name) -> name.trim().toLowerCase().endsWith(".jar"));
             if (files != null) {
                 Method addURL = null;
                 if (Agent.class.getClassLoader() instanceof URLClassLoader) {

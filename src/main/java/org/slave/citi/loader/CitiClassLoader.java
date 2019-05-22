@@ -2,9 +2,11 @@ package org.slave.citi.loader;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import org.slave.citi.Citi;
 
 import java.io.*;
 import java.net.*;
+import java.util.logging.Level;
 
 public final class CitiClassLoader extends URLClassLoader {
 
@@ -20,7 +22,7 @@ public final class CitiClassLoader extends URLClassLoader {
         try {
             super.addURL(file.toURI().toURL());
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            Citi.LOGGER_CITI.log(Level.WARNING, "Failed to add file to classloader due to caught exception!", e);
         }
     }
 

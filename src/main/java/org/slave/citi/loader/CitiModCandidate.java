@@ -1,6 +1,7 @@
 package org.slave.citi.loader;
 
 import com.google.common.collect.ImmutableList;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.objectweb.asm.Type;
@@ -27,7 +28,10 @@ public final class CitiModCandidate {
     @Getter
     private final File file;
 
+    @Getter(AccessLevel.PROTECTED)
     private ImmutableList<TableClass> modTableList;
+
+    @Getter(AccessLevel.PROTECTED)
     private ImmutableList<TableClass> asmTableList;
 
     public void explore() throws IOException {

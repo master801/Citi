@@ -15,10 +15,10 @@ CLASS xaos/a/a xaos/dungeon/DungeonData
 CLASS xaos/a/b xaos/dungeon/DungeonManager
 	FIELD a dungeons Ljava/util/ArrayList;
 	METHOD a clear ()V
-	METHOD a load (Ljava/lang/String;Ljava/lang/String;)Ljava/util/ArrayList;
+	METHOD a loadFromFile (Ljava/lang/String;Ljava/lang/String;)Ljava/util/ArrayList;
 		ARG 0 filePath
 	METHOD a getDungeons (Lorg/w3c/dom/NodeList;)Ljava/util/ArrayList;
-CLASS xaos/a/c xaos/dungeon/c
+CLASS xaos/a/c xaos/dungeon/MonsterSpawnData
 	FIELD a id Ljava/lang/String;
 	FIELD b number I
 	FIELD c levelMin I
@@ -38,25 +38,71 @@ CLASS xaos/b/a xaos/effects/EffectManager
 	METHOD a loadActions (Ljava/lang/String;Z)V
 		ARG 0 filePath
 CLASS xaos/b/b xaos/effects/Effect
+	FIELD A effectsPrequisite Ljava/util/ArrayList;
+	FIELD B messageWhenGain Z
+	FIELD C messageWhenVanish Z
+	FIELD D happiness Ljava/lang/String;
+	FIELD a id Ljava/lang/String;
+	FIELD b name Ljava/lang/String;
+	FIELD c icon Lxaos/tiles/Tile;
+	FIELD d damagePCT Ljava/lang/String;
+	FIELD e defensePCT Ljava/lang/String;
+	FIELD f attackPCT Ljava/lang/String;
+	FIELD g attackSpeedPCT Ljava/lang/String;
+	FIELD h dot Ljava/lang/String;
+	FIELD i healthPointsPCT Ljava/lang/String;
+	FIELD j losPCT Ljava/lang/String;
+	FIELD k speedPCT Ljava/lang/String;
+	FIELD l lasts Ljava/lang/String;
+	FIELD m shouldAttackAllies Z
+	FIELD n removeTarget Z
+	FIELD o shouldFlee Z
+	FIELD p graphicChange Ljava/lang/String;
+	FIELD q onHitPCT Ljava/lang/String;
+	FIELD r onHitEffects Ljava/util/ArrayList;
+	FIELD s onRangedHitPCT Ljava/lang/String;
+	FIELD t onRangedHitEffects Ljava/util/ArrayList;
+	FIELD u afterEffects Ljava/util/ArrayList;
+	FIELD v castEffects Ljava/util/ArrayList;
+	FIELD w castCooldown Ljava/lang/String;
+	FIELD x castTrigger I
+	FIELD y castTargets Ljava/lang/String;
+	FIELD z effectsImmune Ljava/util/ArrayList;
 	METHOD A setEffectsPrequisite (Ljava/lang/String;)V
 	METHOD B setMessageWhenGain (Ljava/lang/String;)V
 	METHOD C setMessageWhenVanish (Ljava/lang/String;)V
-	METHOD D setHappy (Ljava/lang/String;)V
+	METHOD D setHappiness (Ljava/lang/String;)V
+	METHOD a getAsEffectData ()Lxaos/data/EffectData;
 	METHOD a setID (Ljava/lang/String;)V
+	METHOD b getID ()Ljava/lang/String;
 	METHOD b setName (Ljava/lang/String;)V
+	METHOD c getName ()Ljava/lang/String;
 	METHOD c setIcon (Ljava/lang/String;)V
+	METHOD d getIcon ()Lxaos/tiles/Tile;
 	METHOD d setDamagePCT (Ljava/lang/String;)V
+	METHOD e getLasts ()Ljava/lang/String;
 	METHOD e setDefensePCT (Ljava/lang/String;)V
+	METHOD f getGraphicChange ()Ljava/lang/String;
 	METHOD f setAttackPCT (Ljava/lang/String;)V
+	METHOD g getOnHitEffects ()Ljava/util/ArrayList;
 	METHOD g setAttackSpeedPCT (Ljava/lang/String;)V
+	METHOD h getOnRangedHitEffects ()Ljava/util/ArrayList;
 	METHOD h setDOT (Ljava/lang/String;)V
+	METHOD i getAfterEffects ()Ljava/util/ArrayList;
 	METHOD i setHealthPointsPCT (Ljava/lang/String;)V
+	METHOD j getCastEffects ()Ljava/util/ArrayList;
 	METHOD j setLOSPCT (Ljava/lang/String;)V
+	METHOD k getCastCooldown ()Ljava/lang/String;
 	METHOD k setSpeedPCT (Ljava/lang/String;)V
+	METHOD l getCastTargets ()Ljava/lang/String;
 	METHOD l setLasts (Ljava/lang/String;)V
+	METHOD m getEffectsImmune ()Ljava/util/ArrayList;
 	METHOD m setAttackAllies (Ljava/lang/String;)V
+	METHOD n getEffectsPrequisite ()Ljava/util/ArrayList;
 	METHOD n setRemoveTarget (Ljava/lang/String;)V
+	METHOD o messageWhenGain ()Z
 	METHOD o setFlee (Ljava/lang/String;)V
+	METHOD p messageWhenVanish ()Z
 	METHOD p setGraphicChange (Ljava/lang/String;)V
 	METHOD q setOnHitPCT (Ljava/lang/String;)V
 	METHOD r setOnHitEffects (Ljava/lang/String;)V
@@ -69,50 +115,137 @@ CLASS xaos/b/b xaos/effects/Effect
 	METHOD y setCastTargets (Ljava/lang/String;)V
 	METHOD z setEffectsImmune (Ljava/lang/String;)V
 CLASS xaos/c/a xaos/events/EventManagerItem
+	FIELD A setTargetsRandomCell Ljava/lang/String;
+	FIELD B targetsOpenCell Z
+	FIELD C eventEffectList Ljava/util/ArrayList;
+	FIELD D effectAfterEatingList Ljava/util/ArrayList;
+	FIELD E effectAfterSleepList Ljava/util/ArrayList;
+	FIELD F itemList Ljava/util/ArrayList;
+	FIELD G itemsMaxAgePCT Ljava/util/ArrayList;
+	FIELD H itemDeletePCTList Ljava/util/ArrayList;
+	FIELD I itemSpawnLivingList Ljava/util/ArrayList;
+	FIELD J itemSpawnLivingSizeList Ljava/util/ArrayList;
+	FIELD K getFxBeforeCooldown Ljava/lang/String;
+	FIELD L fxAfterCooldown Ljava/lang/String;
+	FIELD M fxRunning Ljava/lang/String;
+	FIELD N fxRunningTurns I
+	FIELD O fxFinish Ljava/lang/String;
+	FIELD P injectActionList Ljava/util/ArrayList;
+	FIELD Q fileUse Ljava/lang/String;
+	FIELD R useFileIDList Ljava/util/ArrayList;
+	FIELD a id Ljava/lang/String;
+	FIELD b name Ljava/lang/String;
+	FIELD c icon Lxaos/tiles/Tile;
+	FIELD d order I
+	FIELD e populationMin I
+	FIELD f spawnAtRandom Z
+	FIELD g turns Ljava/lang/String;
+	FIELD h eventCooldown Ljava/lang/String;
+	FIELD i listAfterEvent Ljava/util/ArrayList;
+	FIELD j shadows Z
+	FIELD k halfShadows Z
+	FIELD l red F
+	FIELD m green F
+	FIELD n blue F
+	FIELD o eventPrequisiteList Ljava/util/ArrayList;
+	FIELD p eventImmuneList Ljava/util/ArrayList;
+	FIELD q waitPCT Ljava/lang/String;
+	FIELD r walkSpeedPCT Ljava/lang/String;
+	FIELD s happinessPCT Ljava/lang/String;
+	FIELD t siege Z
+	FIELD u siegeUnderground Z
+	FIELD v siegeLivings Ljava/util/ArrayList;
+	FIELD w siegeSize Ljava/util/ArrayList;
+	FIELD x targets Ljava/util/ArrayList;
+	FIELD y castTargets Lxaos/data/b;
+	FIELD z targetsPCT Ljava/util/ArrayList;
+	METHOD A getEffectAfterEatingList ()Ljava/util/ArrayList;
 	METHOD A setUseFile (Ljava/lang/String;)V
+	METHOD B getEffectAfterSleepList ()Ljava/util/ArrayList;
 	METHOD B setFilePath (Ljava/lang/String;)V
+	METHOD C getItemList ()Ljava/util/ArrayList;
+	METHOD D getItemMaxAgePCTList ()Ljava/util/ArrayList;
+	METHOD E getItemDeletePCTList ()Ljava/util/ArrayList;
+	METHOD F getItemSpawnLivingList ()Ljava/util/ArrayList;
+	METHOD G getItemSpawnLivingSizeList ()Ljava/util/ArrayList;
+	METHOD H getFxBeforeCoolDown ()Ljava/lang/String;
+	METHOD I getFxAfterCoolDown ()Ljava/lang/String;
+	METHOD J getFxRunning ()Ljava/lang/String;
+	METHOD K getFxRunningTurns ()I
+	METHOD L getFxFinish ()Ljava/lang/String;
+	METHOD M getInjectActionList ()Ljava/util/ArrayList;
+	METHOD N getUseFileIDList ()Ljava/util/ArrayList;
+	METHOD a createEventData ()Lxaos/data/EventData;
+	METHOD a setID (Ljava/lang/String;)V
 	METHOD a setAfterEvents (Ljava/util/ArrayList;)V
+	METHOD b getID ()Ljava/lang/String;
 	METHOD b setName (Ljava/lang/String;)V
 	METHOD b setPrerequisites (Ljava/util/ArrayList;)V
+	METHOD c getName ()Ljava/lang/String;
 	METHOD c setIcon (Ljava/lang/String;)V
-	METHOD c setEventsImmune (Ljava/util/ArrayList;)V
+	METHOD c setEventImmune (Ljava/util/ArrayList;)V
+	METHOD d getIcon ()Lxaos/tiles/Tile;
 	METHOD d setOrder (Ljava/lang/String;)V
+		ARG 0 order
 	METHOD d setSiegeLivings (Ljava/util/ArrayList;)V
+	METHOD e getOrder ()I
 	METHOD e setMinPopulation (Ljava/lang/String;)V
 	METHOD e setSiegeSize (Ljava/util/ArrayList;)V
+	METHOD f getMinPopulation ()I
 	METHOD f setSpawnAtRandom (Ljava/lang/String;)V
 	METHOD f setTargetsPCT (Ljava/util/ArrayList;)V
+	METHOD g shouldSpawnAtRandom ()Z
 	METHOD g setTurns (Ljava/lang/String;)V
 	METHOD g setEffects (Ljava/util/ArrayList;)V
+	METHOD h getAfterEventList ()Ljava/util/ArrayList;
 	METHOD h setEventCooldown (Ljava/lang/String;)V
-	METHOD h setEffectsAfterEat (Ljava/util/ArrayList;)V
+	METHOD h setEffectsAfterEatiing (Ljava/util/ArrayList;)V
+	METHOD i shadows ()Z
 	METHOD i setShadows (Ljava/lang/String;)V
 	METHOD i setEffectsAfterSleep (Ljava/util/ArrayList;)V
+	METHOD j halfShadows ()Z
 	METHOD j setHalfShadows (Ljava/lang/String;)V
-	METHOD j setItems (Ljava/util/ArrayList;)V
+	METHOD j setItemList (Ljava/util/ArrayList;)V
+	METHOD k getRed ()F
 	METHOD k setRed (Ljava/lang/String;)V
-	METHOD k setItemsMaxAgePCT (Ljava/util/ArrayList;)V
+	METHOD k setItemMaxAgePCTList (Ljava/util/ArrayList;)V
+	METHOD l getGreen ()F
 	METHOD l setGreen (Ljava/lang/String;)V
-	METHOD l setItemsDeletePCT (Ljava/util/ArrayList;)V
+	METHOD l setItemDeletePCTList (Ljava/util/ArrayList;)V
+	METHOD m getBlue ()F
 	METHOD m setBlue (Ljava/lang/String;)V
-	METHOD m setItemsSpawnLiving (Ljava/util/ArrayList;)V
+	METHOD m setItemsSpawnLivingList (Ljava/util/ArrayList;)V
+	METHOD n getEventPrequisiteList ()Ljava/util/ArrayList;
 	METHOD n setWaitPCT (Ljava/lang/String;)V
-	METHOD n setItemsSpawnLivingSize (Ljava/util/ArrayList;)V
+	METHOD n setItemSpawnLivingSize (Ljava/util/ArrayList;)V
+	METHOD o getEventImmuneList ()Ljava/util/ArrayList;
 	METHOD o setWalkSpeedPCT (Ljava/lang/String;)V
 	METHOD o setInjectActions (Ljava/util/ArrayList;)V
+	METHOD p getHappinessPCT ()Ljava/lang/String;
 	METHOD p setHappinessPCT (Ljava/lang/String;)V
-	METHOD p setUseFileIDs (Ljava/util/ArrayList;)V
+	METHOD p setUseFileIDList (Ljava/util/ArrayList;)V
+	METHOD q shouldSiege ()Z
 	METHOD q setSiege (Ljava/lang/String;)V
+	METHOD r shouldSiegeUnderground ()Z
 	METHOD r setSiegeUnderground (Ljava/lang/String;)V
+	METHOD s getSiegeLivingList ()Ljava/util/ArrayList;
 	METHOD s setTargets (Ljava/lang/String;)V
+	METHOD t getSiegeSize ()Ljava/util/ArrayList;
 	METHOD t setTargetsRandomCell (Ljava/lang/String;)V
+	METHOD u getTargetList ()Ljava/util/ArrayList;
 	METHOD u setTargetsOpenCell (Ljava/lang/String;)V
+	METHOD v getCastTargets ()Lxaos/data/b;
 	METHOD v setFxBeforeCooldown (Ljava/lang/String;)V
+	METHOD w getTargetsPCT ()Ljava/util/ArrayList;
 	METHOD w setFxAfterCooldown (Ljava/lang/String;)V
+	METHOD x getTargetsRandomCell ()Ljava/lang/String;
 	METHOD x setFxRunning (Ljava/lang/String;)V
+	METHOD y getTargetsOpenCell ()Z
 	METHOD y setFxRunningTurns (Ljava/lang/String;)V
+	METHOD z getEventEffectList ()Ljava/util/ArrayList;
 	METHOD z setFxFinish (Ljava/lang/String;)V
-CLASS xaos/d/b
+CLASS xaos/d/a xaos/d/Beizer
+CLASS xaos/d/b xaos/d/Change
 	FIELD a source Ljava/lang/String;
 	FIELD b destination Ljava/lang/String;
 	FIELD c terrian Ljava/lang/String;
@@ -121,9 +254,12 @@ CLASS xaos/d/b
 	FIELD f heightMin I
 	FIELD g heightMax I
 CLASS xaos/d/c
-	METHOD a loadFrom (Ljava/lang/String;Lxaos/d/c;Z)Lxaos/d/c;
+	METHOD a loadFromFile (Ljava/lang/String;Lxaos/d/c;Z)Lxaos/d/c;
 	METHOD a parse (Ljava/util/ArrayList;Lorg/w3c/dom/Node;Z)V
-CLASS xaos/d/f
+	METHOD a parseNode (Lorg/w3c/dom/Node;)Ljava/util/ArrayList;
+CLASS xaos/d/d
+	METHOD b ()Ljava/lang/String;
+CLASS xaos/d/f xaos/d/HeightSeed
 	FIELD a pointX Ljava/lang/String;
 	FIELD b pointY Ljava/lang/String;
 	FIELD c startingPointID Ljava/lang/String;
@@ -144,7 +280,7 @@ CLASS xaos/d/h
 CLASS xaos/d/j
 	METHOD a getFluidTileType (Ljava/lang/String;)I
 		ARG 0 id
-CLASS xaos/d/l
+CLASS xaos/d/l xaos/d/Seed
 	FIELD a type Ljava/lang/String;
 	FIELD b level Ljava/lang/String;
 	FIELD c pointX Ljava/lang/String;
@@ -229,7 +365,7 @@ CLASS xaos/data/a xaos/data/ItemDrop
 	METHOD c setLevelMin (Ljava/lang/String;)V
 	METHOD d getMaxLevel ()I
 	METHOD d setLevelMax (Ljava/lang/String;)V
-CLASS xaos/data/b
+CLASS xaos/data/b xaos/data/CastTargets
 	FIELD a listFriendly Ljava/util/ArrayList;
 	FIELD b listAllies Ljava/util/ArrayList;
 	FIELD c listEnemies Ljava/util/ArrayList;
@@ -240,6 +376,7 @@ CLASS xaos/data/b
 	FIELD h isEnemy Z
 	FIELD i isHero Z
 	FIELD j isPleb Z
+	METHOD a (Lxaos/tiles/entities/living/LivingEntity;)Z
 CLASS xaos/main/a xaos/main/TownsMain
 	FIELD A disableGods Z
 	FIELD B pauseWhenStarted Z
@@ -250,17 +387,22 @@ CLASS xaos/main/a xaos/main/TownsMain
 	FIELD G allowBurySystem Z
 	FIELD H volumeMusic I
 	FIELD I volumeFx I
-	FIELD K MODS Ljava/util/ArrayList;
+	FIELD J pathFindingLevel I
+	FIELD K mods Ljava/util/ArrayList;
 	FIELD L serverNames Ljava/util/ArrayList;
 	FIELD M serverURLs Ljava/util/ArrayList;
+	FIELD O worldSaveName Ljava/lang/String;
+	FIELD P isFullscreen Z
 	FIELD c fpgsMainMenu I
 	FIELD d fpsIngame I
 	FIELD f textureID I
+	FIELD g currentStepCode I
 	FIELD h shouldCreateScreenshot Z
 	FIELD j task Lxaos/tasks/Task;
 	FIELD l missionData Lxaos/campaign/MissionData;
 	FIELD m userDirectory Ljava/lang/String;
 	FIELD n fileSeparator Ljava/lang/String;
+	FIELD r panelMainMenu Lxaos/panels/a;
 	FIELD t world Lxaos/main/World;
 	FIELD u enableMusic Z
 	FIELD v enableFx Z
@@ -273,6 +415,8 @@ CLASS xaos/main/a xaos/main/TownsMain
 	METHOD C setVolumeMusic ()V
 	METHOD D getVolumeFx ()I
 	METHOD E setVolumeFx ()V
+	METHOD F getPathFindingLEvel ()I
+	METHOD G getWorldSaveName ()Ljava/lang/String;
 	METHOD H getMods ()Ljava/util/ArrayList;
 	METHOD I getModsAsString ()Ljava/lang/String;
 	METHOD J getServerNames ()Ljava/util/ArrayList;
@@ -289,6 +433,7 @@ CLASS xaos/main/a xaos/main/TownsMain
 	METHOD a showTutorial (IILxaos/utils/Point3D;Ljava/lang/String;)V
 	METHOD a showTutorial (IILxaos/utils/Point3D;Ljava/lang/String;Z)V
 	METHOD a showTutorial (IZ)V
+	METHOD a setWorldSaveName (Ljava/lang/String;)V
 	METHOD a saveGameToFile (Ljava/lang/String;Ljava/lang/String;)V
 	METHOD a setMissionData (Lxaos/campaign/MissionData;)V
 	METHOD a setWorld (Lxaos/main/World;)V
@@ -315,6 +460,7 @@ CLASS xaos/main/a xaos/main/TownsMain
 	METHOD i getMissionData ()Lxaos/campaign/MissionData;
 	METHOD i setAllowMouseScrollHeightCubes (Z)V
 	METHOD j setDisableItems (Z)V
+	METHOD k clearTask ()V
 	METHOD k setDisableGods (Z)V
 	METHOD l setPauseWhenStarted (Z)V
 	METHOD m shouldAllowSeigePause (Z)V
@@ -340,6 +486,10 @@ CLASS xaos/utils/d xaos/utils/ImageFile
 		ARG 3 pixelData
 	METHOD e getPixelData ()Ljava/nio/ByteBuffer;
 	METHOD f clearPixelData ()V
+CLASS xaos/utils/e xaos/utils/LanguageFile
+	FIELD a languageName Ljava/lang/String;
+	FIELD b language Ljava/lang/String;
+	FIELD c region Ljava/lang/String;
 CLASS xaos/utils/f xaos/utils/TownsClassLoader
 	FIELD a startFile Ljava/io/File;
 	METHOD findResource findResource (Ljava/lang/String;)Ljava/net/URL;
@@ -375,9 +525,11 @@ CLASS xaos/utils/n xaos/utils/FontManager
 CLASS xaos/utils/o xaos/utils/DataManager
 	FIELD a classLoader Lxaos/utils/f;
 	FIELD b rand Ljava/util/Random;
+	METHOD a saveGameFile ()V
 	METHOD a randIntMin (II)I
 	METHOD a getInt (Ljava/lang/String;)I
 	METHOD a getIntOrDefault (Ljava/lang/String;I)I
+	METHOD a loadGameSave (Ljava/lang/String;Ljava/lang/String;)V
 	METHOD a searchForAllXmlFile (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/util/ArrayList;
 	METHOD a searchForModData (Ljava/util/ArrayList;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
 	METHOD b searchForSaves ()Ljava/util/ArrayList;
@@ -389,8 +541,10 @@ CLASS xaos/utils/o xaos/utils/DataManager
 	METHOD e getExistingLanguageFiles ()Ljava/util/ArrayList;
 	METHOD e removeExtension (Ljava/lang/String;)Ljava/lang/String;
 	METHOD f doesSaveExist (Ljava/lang/String;)Z
+	METHOD g deleteSaveFile (Ljava/lang/String;)V
 	METHOD h initFolders (Ljava/lang/String;)Ljava/io/File;
 	METHOD j toList (Ljava/lang/String;)Ljava/util/ArrayList;
+	METHOD k splitToList (Ljava/lang/String;)Ljava/util/ArrayList;
 	METHOD l getResourceBundle (Ljava/lang/String;)Ljava/util/ResourceBundle;
 		ARG 0 locale
 CLASS xaos/utils/p xaos/utils/GLManager
@@ -435,6 +589,8 @@ CLASS xaos/utils/q
 	METHOD a intArrayListContainsInt (Ljava/util/ArrayList;I)I
 	METHOD a containsInt ([II)Z
 	METHOD b splitString (Ljava/lang/String;)[I
+	METHOD c intArraysListToStringArraysList (Ljava/util/ArrayList;)Ljava/util/ArrayList;
+	METHOD d toStringList (Ljava/util/ArrayList;)Ljava/util/ArrayList;
 CLASS xaos/utils/r xaos/utils/KeysManager
 	FIELD a KEY_IDS [Ljava/lang/String;
 	FIELD b KEY_NAMES [Ljava/lang/String;
@@ -480,12 +636,64 @@ CLASS xaos/zones/b xaos/zones/ZoneType
 	METHOD d setMinWidth (Ljava/lang/String;)V
 	METHOD e getTile ()Lxaos/tiles/Tile;
 	METHOD e setMinHeight (Ljava/lang/String;)V
-CLASS xaos/panels/a
+CLASS xaos/panels/a xaos/panels/PanelMainMenu
+	FIELD A ITEM_OPEN_FOLDER Ljava/lang/String;
+	FIELD B ITEM_TOGGLE_DISABLE_GODS Ljava/lang/String;
+	FIELD a ITEM_NEW_GAME Ljava/lang/String;
+	FIELD b ITEM_NEW_GAME_SET_SAVE_NAME Ljava/lang/String;
+	FIELD c ITEM_NEW_GAME_SET_SAVE_NAME_B Ljava/lang/String;
+	FIELD d ITEM_CONTINUE_GAME Ljava/lang/String;
+	FIELD e ITEM_DELETE_GAME Ljava/lang/String;
+	FIELD f ITEM_TOGGLE_MUSIC Ljava/lang/String;
+	FIELD g ITEM_ADD_MUSIC_VOL Ljava/lang/String;
+	FIELD h ITEM_TOGGLE_FX Ljava/lang/String;
+	FIELD i ITEM_ADD_FX_VOL Ljava/lang/String;
+	FIELD j ITEM_TOGGLE_FULLSCREEN Ljava/lang/String;
+	FIELD k ITEM_TOGGLE_MOUSE_SCROLL Ljava/lang/String;
+	FIELD l ITEM_TOGGLE_MOUSE_SCROLL_EARS Ljava/lang/String;
+	FIELD m ITEM_TOGGLE_MOUSE_2D_CUBES Ljava/lang/String;
+	FIELD n ITEM_TOGGLE_DISABLE_ITEMS Ljava/lang/String;
+	FIELD o ITEM_PAUSE Ljava/lang/String;
+	FIELD p ITEM_TOGGLE_AUTOSAVE Ljava/lang/String;
+	FIELD q ITEM_TOGGLE_SIEGES Ljava/lang/String;
+	FIELD r ITEM_TOGGLE_SIEGE_PAUSE Ljava/lang/String;
+	FIELD s ITEM_TOGGLE_CARAVAN_PAUSE Ljava/lang/String;
+	FIELD t ITEM_TOGGLE_BURY Ljava/lang/String;
+	FIELD u ITEM_MM_DELETE_ERROR Ljava/lang/String;
+	FIELD v ITEM_CHG_HOT_KEY Ljava/lang/String;
+	FIELD w ITEM_TOGGLE_PFL Ljava/lang/String;
+	FIELD x ITEM_TOGGLE_MOD Ljava/lang/String;
+	FIELD y ITEM_ADD_SERVER Ljava/lang/String;
+	FIELD z ITEM_REMOVE_SERVER Ljava/lang/String;
+	METHOD a clear ()V
+CLASS xaos/panels/b
+	METHOD a containsGraphicsFile (Ljava/util/ArrayList;Lxaos/utils/m;)Z
+	METHOD n reset ()V
+CLASS xaos/panels/c
+	FIELD e textureID I
+	METHOD b show ()V
+	METHOD b setText (Ljava/lang/String;)V
+	METHOD run run ()V
 CLASS xaos/panels/d
+	FIELD i tileGrid Lxaos/tiles/Tile;
+	FIELD j tileGridNA Lxaos/tiles/Tile;
+	FIELD k tileMouseCursor3D Lxaos/tiles/Tile;
+	FIELD l mouseArrowWest Lxaos/tiles/Tile;
+	FIELD m mouseArrowNorth Lxaos/tiles/Tile;
+	FIELD n tileMouseArrowEast Lxaos/tiles/Tile;
+	FIELD o tileMouseArrowSouth Lxaos/tiles/Tile;
+	FIELD x tileLockedConnector Lxaos/tiles/Tile;
 	METHOD c setDimensions (II)V
+CLASS xaos/panels/e
+	METHOD a loadFromFile (Ljava/lang/String;Z)V
+CLASS xaos/panels/g xaos/panels/PanelYellow
+	FIELD b TILE_UI_YELLOW Lxaos/tiles/Tile;
+	METHOD b clear ()V
+CLASS xaos/panels/i xaos/panels/PanelTyping
 CLASS xaos/actions/a xaos/actions/ActionManager
 	FIELD a actionPriorityMap Ljava/util/HashMap;
 	FIELD b audio Ljava/util/HashMap;
+	METHOD a reset ()V
 	METHOD a setMusicLevels (I)V
 	METHOD a setVolumeLevels (II)V
 	METHOD a log (ILjava/lang/String;Ljava/lang/String;)V
@@ -494,6 +702,7 @@ CLASS xaos/actions/a xaos/actions/ActionManager
 		ARG 2 id
 	METHOD a getActionPriority (Ljava/lang/String;)Lxaos/actions/b;
 		ARG 0 filePath
+	METHOD a loadDungeonFromFile (Ljava/lang/String;Ljava/lang/String;)V
 	METHOD a loadActionPriorities (Ljava/lang/String;Z)V
 	METHOD a parseQueue (Lorg/w3c/dom/NodeList;)Ljava/util/ArrayList;
 	METHOD a findAndGetValue (Lorg/w3c/dom/NodeList;Ljava/lang/String;)Ljava/lang/String;
@@ -521,11 +730,38 @@ CLASS xaos/actions/b xaos/actions/ActionPriority
 	METHOD d setGeneratedItem (Ljava/lang/String;)V
 	METHOD e setInverted (Ljava/lang/String;)V
 CLASS xaos/actions/c xaos/actions/ActionPriorityManager
-CLASS xaos/actions/d
+	FIELD a PRIORITY_MINE_DIG Ljava/lang/String;
+	FIELD b PRIORITY_HAUL Ljava/lang/String;
+	FIELD c PRIORITY_TRADING Ljava/lang/String;
+	FIELD d PRIORITY_BUILDINGS Ljava/lang/String;
+	FIELD e PRIORITY_FEED Ljava/lang/String;
+	METHOD a deserialize (Ljava/io/ObjectInputStream;)V
+	METHOD a serialize (Ljava/io/ObjectOutputStream;)V
+	METHOD c clear ()V
+	METHOD d loadProperties ()V
+	METHOD d readPrioritiesFromFile (Ljava/lang/String;)V
+CLASS xaos/actions/d xaos/actions/ActionManagerItem
+	FIELD a name Ljava/lang/String;
 	FIELD b tile Lxaos/tiles/Tile;
+	METHOD <init> (Ljava/lang/String;)V
+		ARG 0 id
+	METHOD a getName ()Ljava/lang/String;
+	METHOD a setName (Ljava/lang/String;)V
 	METHOD b getTile ()Lxaos/tiles/Tile;
+	METHOD b setIcon (Ljava/lang/String;)V
 CLASS xaos/data/Type
+	FIELD a mapID Ljava/util/HashMap;
+	FIELD b mapIcon Ljava/util/HashMap;
+	FIELD d id Ljava/lang/String;
 	FIELD serialVersionUID serialVersionUID J
+	METHOD a ()Ljava/util/ArrayList;
+	METHOD a loadTypesFromFile (Ljava/lang/String;Z)V
+	METHOD d getID ()Ljava/lang/String;
+	METHOD d getIcon (Ljava/lang/String;)Ljava/lang/String;
+	METHOD e clear ()V
+	METHOD f reset ()V
+	METHOD f getID (Ljava/lang/String;)Ljava/lang/String;
+	METHOD g initTypes ()V
 	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
 		ARG 0 objectInput
 	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
@@ -534,6 +770,9 @@ CLASS xaos/campaign/b xaos/campaign/CampaignManager
 	FIELD a campaigns Ljava/util/ArrayList;
 	FIELD b campaignIDs Ljava/util/HashMap;
 	METHOD a getCampaigns ()Ljava/util/ArrayList;
+	METHOD a getEventManagerItem (Ljava/lang/String;)Lxaos/c/a;
+	METHOD a loadMissionData (Ljava/lang/String;Ljava/lang/String;)Lxaos/campaign/MissionData;
+	METHOD a loadCampaignFromFile (Ljava/lang/String;Z)V
 	METHOD b clear ()V
 	METHOD b loadEvents (Ljava/lang/String;Z)V
 		ARG 0 filePath
@@ -541,12 +780,60 @@ CLASS xaos/campaign/b xaos/campaign/CampaignManager
 	METHOD c initEvents ()V
 	METHOD e loadCampaigns ()V
 CLASS xaos/main/World
+	FIELD B containerList Ljava/util/ArrayList;
+	FIELD C stockPileList Ljava/util/ArrayList;
+	FIELD D buryDataList Ljava/util/ArrayList;
+	FIELD E zoneList Ljava/util/ArrayList;
+	FIELD F globalEventData Lxaos/data/GlobalEventData;
+	FIELD G getEventDataList Ljava/util/ArrayList;
+	FIELD N taskManager Lxaos/tasks/TaskManager;
+	FIELD R date Lxaos/utils/Date;
+	FIELD S terrainMouseCursor Lxaos/tiles/terrain/special/b;
+	FIELD T terrainMouseCursorBAD Lxaos/tiles/terrain/special/c;
+	FIELD U tileUnknown Lxaos/tiles/Tile;
+	FIELD V tileUnknownBlock Lxaos/tiles/Tile;
+	FIELD W terrainWater Lxaos/tiles/terrain/special/e;
+	FIELD X terrainLava Lxaos/tiles/terrain/special/a;
+	FIELD Y terrainOrders Lxaos/tiles/terrain/special/d;
+	FIELD Z redcross Lxaos/tiles/entities/special/RedCross;
+	FIELD aa tileStockpile Lxaos/tiles/terrain/special/StockpileTile;
+	FIELD ab tilePatrolMark Lxaos/tiles/Tile;
+	FIELD ac citEating Lxaos/tiles/entities/special/CitEating;
+	FIELD ad citSleeping Lxaos/tiles/entities/special/CitSleeping;
+	FIELD ae citExclamation Lxaos/tiles/entities/special/CitExclamation;
 	FIELD j citizenGroups Lxaos/data/CitizenGroups;
 	FIELD l soldierGroups Lxaos/data/SoldierGroups;
 	FIELD serialVersionUID serialVersionUID J
+	METHOD K getStockpileList ()Ljava/util/ArrayList;
+	METHOD L getBuryData ()Ljava/util/ArrayList;
+	METHOD N getGlobalEventData ()Lxaos/data/GlobalEventData;
+	METHOD P getEventData ()Ljava/util/ArrayList;
+	METHOD a generateWorld (Ljava/lang/String;Ljava/lang/String;)V
+	METHOD a addBuryData (Lxaos/data/BuryData;)V
+	METHOD a addStockpile (Lxaos/stockpiles/Stockpile;)V
+	METHOD a addZone (Lxaos/zones/Zone;Z)V
+		ARG 1 shouldAdd
 	METHOD aB init ()V
+	METHOD ab getTaskManager ()Lxaos/tasks/TaskManager;
+	METHOD ae getIconMouseCursor ()Lxaos/tiles/Tile;
+	METHOD af getIconMouseCursorAir ()Lxaos/tiles/Tile;
+	METHOD ag getIconMouseCursorBADMini ()Lxaos/tiles/Tile;
+	METHOD aj getIconOrdersMiniBlock ()Lxaos/tiles/Tile;
+	METHOD ak getRedCross ()Lxaos/tiles/entities/special/RedCross;
+	METHOD al getCitSleeping ()Lxaos/tiles/entities/special/CitSleeping;
+	METHOD am getCitEating ()Lxaos/tiles/entities/special/CitEating;
+	METHOD an getCitExclamation ()Lxaos/tiles/entities/special/CitExclamation;
+	METHOD c getIconMouseCursor (Z)Lxaos/tiles/Tile;
+	METHOD d setID (Ljava/lang/String;)Z
+	METHOD d getIconMouseCursorBAD (Z)Lxaos/tiles/Tile;
+	METHOD e containsEventManagerItem (Ljava/lang/String;)Z
+	METHOD e getIconOrders (Z)Lxaos/tiles/Tile;
+	METHOD n getIconWater (I)Lxaos/tiles/Tile;
+	METHOD o getIconLava (I)Lxaos/tiles/Tile;
 	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
 		ARG 0 objectInput
+	METHOD v getCitizenGroups ()Lxaos/data/CitizenGroups;
+	METHOD w getSoldierGroups ()Lxaos/data/SoldierGroups;
 	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
 		ARG 0 objectOutput
 CLASS xaos/property/a xaos/property/Properties
@@ -594,7 +881,9 @@ CLASS xaos/tiles/Cell
 	FIELD serialVersionUID serialVersionUID J
 	METHOD B isTransparent ()Z
 	METHOD e getItem ()Lxaos/tiles/entities/items/Item;
+	METHOD o ()Z
 CLASS xaos/tiles/Tile
+	FIELD b textureID I
 	FIELD c color Lxaos/utils/ColorGL;
 	FIELD d xPos B
 	FIELD e yPos B
@@ -605,10 +894,17 @@ CLASS xaos/tiles/Tile
 	FIELD r height S
 	FIELD s heightOffset S
 	FIELD serialVersionUID serialVersionUID J
+	METHOD a setData (Ljava/lang/String;)V
+		ARG 0 deserializedData
+	METHOD a setTextureFile (Ljava/lang/String;Ljava/lang/String;)V
+	METHOD b setWidth (I)V
+	METHOD b setCoordinates (Ljava/lang/String;Ljava/lang/String;)V
 	METHOD c getTextureID ()I
 	METHOD c setHeight (I)V
 		ARG 0 height
+	METHOD c setCoordinates (Ljava/lang/String;Ljava/lang/String;)Z
 	METHOD d getColor ()Lxaos/utils/ColorGL;
+	METHOD d setSize (Ljava/lang/String;Ljava/lang/String;)V
 	METHOD e getXPos ()I
 	METHOD f getYPos ()I
 	METHOD o getWidth ()I
@@ -627,6 +923,7 @@ CLASS xaos/utils/Date
 		ARG 0 objectOutput
 CLASS xaos/zones/Zone
 	FIELD serialVersionUID serialVersionUID J
+	METHOD c getCoordinatesList ()Ljava/util/ArrayList;
 	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
 		ARG 0 objectInput
 	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
@@ -708,14 +1005,45 @@ CLASS xaos/utils/Point3D xaos/utils/Point3D
 	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
 		ARG 0 objectOutput
 CLASS xaos/actions/Action
+	FIELD a id Ljava/lang/String;
+	FIELD b turns I
+	FIELD c terrain Lxaos/utils/Point3DShort;
+	FIELD d destPoint Lxaos/utils/Point3DShort;
+	FIELD e entityID I
+	FIELD i queueData Lxaos/actions/QueueData;
 	FIELD serialVersionUID serialVersionUID J
+	METHOD a getID ()Ljava/lang/String;
+	METHOD a setEntityID (I)V
+	METHOD a setQueueData (Lxaos/actions/QueueData;)V
+	METHOD a setTerrain (Lxaos/utils/Point3DShort;)V
+	METHOD b getTerrain ()Lxaos/utils/Point3DShort;
+	METHOD b setDestPoint (Lxaos/utils/Point3DShort;)V
+	METHOD c getDestPoint ()Lxaos/utils/Point3DShort;
+	METHOD d getEntityID ()I
+	METHOD h getQueueData ()Lxaos/actions/QueueData;
 	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
 		ARG 0 objectInput
 	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
 		ARG 0 objectOutput
 CLASS xaos/data/EventData
+	FIELD a id Ljava/lang/String;
+	FIELD b order I
+	FIELD c turns I
+	FIELD d eventCooldown I
+	FIELD e waitPCT I
+	FIELD f walkSpeedPCT I
 	FIELD h EVENTS Ljava/util/HashMap;
 	FIELD serialVersionUID serialVersionUID J
+	METHOD a setOrder (I)V
+	METHOD b getID ()Ljava/lang/String;
+	METHOD b setTurns (I)V
+	METHOD c getOrder ()I
+	METHOD c setEventCooldown (I)V
+	METHOD d getEventCooldown ()I
+	METHOD d setWaitPCT (I)V
+	METHOD e getWaitPCT ()I
+	METHOD e setWalkSpeedPCT (I)V
+	METHOD f getWalkSpeedPCT ()I
 	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
 		ARG 0 objectInput
 	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
@@ -744,25 +1072,126 @@ CLASS xaos/tasks/HotPoint
 		ARG 0 objectInput
 	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
 		ARG 0 objectOutput
+CLASS xaos/data/EffectData xaos/data/EffectData
+	FIELD a id Ljava/lang/String;
+	FIELD b damagePCT I
+	FIELD c defensePCT I
+	FIELD d attackPCT I
+	FIELD e attackSpeedPCT I
+	FIELD f healthPointsPCT I
+	FIELD g lostPCT I
+	FIELD h speedPCT I
+	FIELD i lasts I
+	FIELD j graphicChange Ljava/lang/String;
+	FIELD k shouldAttackAllies Z
+	FIELD l removeTarget Z
+	FIELD m shouldFlee Z
+	FIELD n dot I
+	FIELD o onHitPCT I
+	FIELD p onRangedHitPCT I
+	FIELD q isHappy I
+	FIELD r castCooldown I
+	FIELD s castTrigger I
+	FIELD serialVersionUID serialVersionUID J
+	FIELD t castTargets Lxaos/data/b;
+	FIELD u happiness I
+	METHOD a getID ()Ljava/lang/String;
+	METHOD a setDamagePCT (I)V
+	METHOD a setGraphicChange (Ljava/lang/String;)V
+	METHOD a setCastTargets (Lxaos/data/b;)V
+	METHOD a setShouldAttackAllies (Z)V
+	METHOD b getDamagePCT ()I
+	METHOD b setDefensePCT (I)V
+	METHOD b setRemoveTarget (Z)V
+	METHOD c getDefensePCT ()I
+	METHOD c setAttackPCT (I)V
+	METHOD c setShouldFlee (Z)V
+	METHOD d getAttackPCT ()I
+	METHOD d setAttackSpeedPCT (I)V
+	METHOD e getAttackSpeedPCT ()I
+	METHOD e setHealthPointsPCT (I)V
+	METHOD f getHealthPointsPCT ()I
+	METHOD f setLostPCT (I)V
+	METHOD g getLostPCT ()I
+	METHOD g setSpeedPCT (I)V
+	METHOD h getSpeedPCT ()I
+	METHOD h setLasts (I)V
+	METHOD i getLasts ()I
+	METHOD i setDOT (I)V
+	METHOD j getGraphicChange ()Ljava/lang/String;
+	METHOD j setOnHitPCT (I)V
+	METHOD k graphicChange ()Z
+	METHOD k setOnRangedHitPCT (I)V
+	METHOD l shouldAttackAllies ()Z
+	METHOD l isHappy (I)V
+	METHOD m removeTarget ()Z
+	METHOD m setCastCooldown (I)V
+	METHOD n shouldFlee ()Z
+	METHOD n setCastTrigger (I)V
+	METHOD o getDOT ()I
+	METHOD o setHappiness (I)V
+	METHOD p getOnHitPCT ()I
+	METHOD q getOnRangedHitPCT ()I
+	METHOD r isHappy ()I
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+		ARG 0 objectInput
+	METHOD s getCastCooldown ()I
+	METHOD t getCastTrigger ()I
+	METHOD u getCastTargets ()Lxaos/data/b;
+	METHOD v getHappiness ()I
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+		ARG 0 objectOutput
 CLASS xaos/tiles/terrain/a xaos/tiles/terrain/TerrainManager
+	FIELD e habitatGroupMap Ljava/util/HashMap;
 	METHOD a clear ()V
 	METHOD a (Ljava/lang/String;)Lxaos/tiles/terrain/b;
 		ARG 0 name
 	METHOD a loadTerrain (Ljava/lang/String;Z)V
 		ARG 0 filePath
 	METHOD b initTerrain ()V
-CLASS xaos/tiles/terrain/b
+	METHOD b (Ljava/lang/String;)Ljava/util/ArrayList;
+CLASS xaos/tiles/terrain/b xaos/tiles/terrain/TerrainHabitat
+	FIELD a nextIndex I
+	FIELD b id Ljava/lang/String;
+	FIELD c index I
+	FIELD d name Ljava/lang/String;
+	FIELD e mineTurns I
+	FIELD f drop Ljava/lang/String;
+	FIELD g dropPCT I
+	FIELD h ladderItem Ljava/lang/String;
+	FIELD i group Ljava/lang/String;
+	FIELD j isBlocky Z
+	FIELD k action Ljava/util/ArrayList;
+	METHOD a getIcon ()Lxaos/tiles/terrain/Terrain;
 	METHOD a setName (Ljava/lang/String;)V
 	METHOD a setAction (Ljava/util/ArrayList;)V
+	METHOD a setBlocky (Z)V
+	METHOD b getID ()Ljava/lang/String;
 	METHOD b setMineTurns (Ljava/lang/String;)V
+	METHOD c getIndex ()I
 	METHOD c setDrop (Ljava/lang/String;)V
+	METHOD d getName ()Ljava/lang/String;
 	METHOD d setDropPCT (Ljava/lang/String;)V
+	METHOD e getMineTurns ()I
 	METHOD e setLadderItem (Ljava/lang/String;)V
+	METHOD f getDrop ()Ljava/lang/String;
 	METHOD f setCanBeFilled (Ljava/lang/String;)V
+	METHOD g getDropPCT ()I
 	METHOD g setGroup (Ljava/lang/String;)V
+	METHOD h getLadderItem ()Ljava/lang/String;
 	METHOD h setBlocky (Ljava/lang/String;)V
+	METHOD i getGroup ()Ljava/lang/String;
+	METHOD j isBlocky ()Z
+	METHOD k getAction ()Ljava/util/ArrayList;
+	METHOD l hasAction ()Z
 CLASS xaos/utils/AStarNodo
 	FIELD serialVersionUID serialVersionUID J
+CLASS xaos/data/CaravanData
+	FIELD serialVersionUID serialVersionUID J
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+		ARG 0 objectInput
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+		ARG 0 objectOutput
 CLASS xaos/data/SoldierData
 	FIELD serialVersionUID serialVersionUID J
 	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
@@ -798,6 +1227,7 @@ CLASS xaos/data/EquippedData
 		ARG 0 objectOutput
 CLASS xaos/tasks/TaskManager
 	FIELD serialVersionUID serialVersionUID J
+	METHOD a addTask (Lxaos/tasks/Task;)V
 	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
 		ARG 0 objectInput
 	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
@@ -819,6 +1249,7 @@ CLASS xaos/utils/Point3DShort xaos/utils/Point3DShort
 	FIELD a x S
 	FIELD b y S
 	FIELD c z S
+	FIELD d pointsList Ljava/util/ArrayList;
 	FIELD serialVersionUID serialVersionUID J
 	METHOD <init> (SSS)V
 		ARG 0 x
@@ -828,6 +1259,7 @@ CLASS xaos/utils/Point3DShort xaos/utils/Point3DShort
 		ARG 0 x
 		ARG 1 y
 		ARG 2 z
+	METHOD a addAll (Ljava/util/ArrayList;)V
 	METHOD a equals (Lxaos/utils/Point3D;)Z
 		ARG 0 point3D
 	METHOD a setCoords (Lxaos/utils/Point3DShort;)V
@@ -836,10 +1268,19 @@ CLASS xaos/utils/Point3DShort xaos/utils/Point3DShort
 		ARG 0 x
 		ARG 1 y
 		ARG 2 z
+	METHOD b createPoint (III)Lxaos/utils/Point3DShort;
+		ARG 0 x
+		ARG 1 y
+		ARG 2 z
 	METHOD b clone (Lxaos/utils/Point3DShort;)Lxaos/utils/Point3DShort;
 		ARG 0 point3DShort
-	METHOD b (SSS)Lxaos/utils/Point3DShort;
+	METHOD b getPoint (SSS)Lxaos/utils/Point3DShort;
+		ARG 0 x
+		ARG 1 y
+		ARG 2 z
+	METHOD c copy (Lxaos/utils/Point3DShort;)Lxaos/utils/Point3DShort;
 	METHOD d clone ()Lxaos/utils/Point3D;
+	METHOD d add (Lxaos/utils/Point3DShort;)V
 	METHOD equals (Ljava/lang/Object;)Z
 		ARG 0 object
 	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
@@ -853,22 +1294,48 @@ CLASS xaos/zones/ZoneHeroRoom
 	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
 	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
 CLASS xaos/zones/ZonePersonal
+	FIELD serialVersionUID serialVersionUID J
 	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
 	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
 CLASS xaos/campaign/MissionData
 	FIELD serialVersionUID serialVersionUID J
 CLASS xaos/data/GlobalEventData
+	FIELD a tileIconEvents Lxaos/tiles/Tile;
+	FIELD d red F
+	FIELD e green F
+	FIELD f blue F
+	FIELD i tileIcon Lxaos/tiles/Tile;
 	FIELD serialVersionUID serialVersionUID J
+	METHOD a init ()V
+	METHOD a setRed (F)V
+	METHOD a setWaitPCT (I)V
+	METHOD a enableShadows (Z)V
+	METHOD b setGreen (F)V
+	METHOD b setWalkSpeedPCT (I)V
+	METHOD b enableHalfShadows (Z)V
+	METHOD c setBlue (F)V
 	METHOD d getRed ()F
 	METHOD e getGreen ()F
 	METHOD f getBlue ()F
+	METHOD g getWaitPCT ()I
+	METHOD h getWalkSpeedPCT ()I
+	METHOD i getTileIcon ()Lxaos/tiles/Tile;
+	METHOD j setEventTileIcon ()V
 	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
 		ARG 0 objectInput
 	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
 		ARG 0 objectOutput
 CLASS xaos/stockpiles/Stockpile
+	FIELD a nextIndex I
+	FIELD b index I
 	FIELD c type Lxaos/data/Type;
 	FIELD serialVersionUID serialVersionUID J
+	METHOD a getIndex ()I
+	METHOD b getType ()Lxaos/data/Type;
+	METHOD b getStockpile (Ljava/lang/String;)Lxaos/stockpiles/Stockpile;
+		ARG 0 index
+	METHOD c getStockpile (I)Lxaos/stockpiles/Stockpile;
+		ARG 0 index
 	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
 		ARG 0 objectInput
 	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
@@ -883,7 +1350,36 @@ CLASS xaos/data/HeroPrerequisite
 	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
 		ARG 0 objectOutput
 CLASS xaos/data/LivingEntityData
+	FIELD a name Ljava/lang/String;
+	FIELD b hp I
+	FIELD k moral I
+	FIELD l followTurns I
+	FIELD n attack I
+	FIELD p defense I
+	FIELD q maxHp I
+	FIELD r damage I
 	FIELD serialVersionUID serialVersionUID J
+	METHOD a getName ()Ljava/lang/String;
+	METHOD a setAttack (I)V
+	METHOD a setName (Ljava/lang/String;)V
+	METHOD a equipMilitaryItem (Lxaos/tiles/entities/items/military/MilitaryItem;Lxaos/tiles/entities/living/LivingEntity;)V
+	METHOD b getHp ()I
+	METHOD b setAttackSpeed (I)V
+	METHOD c setDefense (I)V
+	METHOD d getMoral ()I
+	METHOD d setHp (I)V
+	METHOD e getFollowTurns ()I
+	METHOD e setDamage (I)V
+	METHOD g getAttack ()I
+	METHOD g setLOS (I)V
+	METHOD h setMovePCT (I)V
+	METHOD i getDefense ()I
+	METHOD i setWalkSpeed (I)V
+	METHOD j getMaxHp ()I
+	METHOD j setMoral (I)V
+	METHOD k getDamage ()I
+	METHOD k setFollowTurns (I)V
+	METHOD o getHpStatus ()Ljava/lang/String;
 	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
 		ARG 0 objectInput
 	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
@@ -909,11 +1405,15 @@ CLASS xaos/tiles/entities/Entity
 		ARG 0 objectOutput
 CLASS xaos/tiles/terrain/Terrain
 	FIELD serialVersionUID serialVersionUID J
+	METHOD a setMineTurns (I)V
 	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
 		ARG 0 objectInput
 	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
 		ARG 0 objectOutput
 CLASS xaos/panels/menus/SmartMenu
+	FIELD a ICON_RED Lxaos/tiles/Tile;
+	FIELD b COLOR_BRIGHT_ORANGE Ljava/awt/Color;
+	FIELD c COLOR_GL_BRIGHT_ORANGE Lxaos/utils/ColorGL;
 	FIELD h children Ljava/util/ArrayList;
 	FIELD r tile Lxaos/tiles/Tile;
 	FIELD serialVersionUID serialVersionUID J
@@ -937,29 +1437,56 @@ CLASS xaos/tiles/entities/items/a xaos/tiles/entities/items/ItemManager
 	METHOD b getItemTile (Ljava/lang/String;)Lxaos/tiles/Tile;
 		ARG 0 itemName
 CLASS xaos/tiles/entities/items/b xaos/tiles/entities/items/ItemManagerItem
+	FIELD A spawnTurns Ljava/lang/String;
+	FIELD B wall Z
+	FIELD C wallConnector Z
+	FIELD D door Z
+	FIELD E canBeEaten Z
 	FIELD F foodValue I
 	FIELD G foodFilePCT I
 	FIELD H foodEatTime I
+	FIELD I foodEffects Ljava/util/ArrayList;
+	FIELD J happiness I
+	FIELD K usedToSleep Z
+	FIELD L useToSit Z
+	FIELD M zoneMergerUp Z
+	FIELD N canBeBuiltOnFloor Z
 	FIELD O canBeBuiltOnHoles Z
 	FIELD P canBeUnlocked Z
 	FIELD Q glue Z
 	FIELD R base Z
 	FIELD S blocky Z
 	FIELD T text Z
+	FIELD U lightRadius I
+	FIELD V lightRed I
+	FIELD W lightGreen I
+	FIELD X lightBlue I
+	FIELD Y translucent Z
+	FIELD Z locked Z
 	FIELD aA trapEffects Ljava/util/ArrayList;
 	FIELD aB trapCooldown Ljava/lang/String;
 	FIELD aC trapOnIcon Ljava/lang/String;
+	FIELD aD trapTargets Lxaos/data/b;
 	FIELD aE blockFluids Z
 	FIELD aF fluidsElevator Z
 	FIELD aG allowFluids Z
 	FIELD aH bury Z
 	FIELD aI buryLocked Z
+	FIELD aJ buryItem Ljava/util/ArrayList;
+	FIELD aK buryItemPCT Ljava/util/ArrayList;
 	FIELD aL buryDestroyItems Z
 	FIELD aM buryLivings Ljava/util/ArrayList;
 	FIELD aN buryLivingsPCT Ljava/util/ArrayList;
 	FIELD aO canBeRotated Z
+	FIELD aP buildAction Ljava/lang/String;
+	FIELD aa value I
+	FIELD ab alwaysOperative Z
 	FIELD ac container Z
+	FIELD ad containerSize I
 	FIELD ae stackable Z
+	FIELD af stackSize I
+	FIELD ag speedUpPCT I
+	FIELD ah location I
 	FIELD ai attack Ljava/lang/String;
 	FIELD aj attackSpeed Ljava/lang/String;
 	FIELD ak defense Ljava/lang/String;
@@ -978,13 +1505,43 @@ CLASS xaos/tiles/entities/items/b xaos/tiles/entities/items/ItemManagerItem
 	FIELD ax action Ljava/util/ArrayList;
 	FIELD ay zone Ljava/util/ArrayList;
 	FIELD az trap Z
-	METHOD A (Ljava/lang/String;)V
-	METHOD B (Ljava/lang/String;)V
+	FIELD d leve I
+	FIELD e name Ljava/lang/String;
+	FIELD f description Ljava/util/ArrayList;
+	FIELD g type Ljava/lang/String;
+	FIELD h building Ljava/lang/String;
+	FIELD i prerequisite Ljava/util/ArrayList;
+	FIELD j buildingTime I
+	FIELD k floorWalkSpeed I
+	FIELD m habitat Ljava/util/ArrayList;
+	FIELD n habitatGroup Ljava/lang/String;
+	FIELD o habitatHeightMin I
+	FIELD p habitatHeightMax I
+	FIELD q maxAge Ljava/lang/String;
+	FIELD r maxAgeItem Ljava/lang/String;
+	FIELD s maxAgeTerrain Ljava/lang/String;
+	FIELD t maxAgeNeedsWater Z
+	FIELD u maxAgeNeedsWaterRadius I
+	FIELD v maxAgeNeedsItems Ljava/util/ArrayList;
+	FIELD w maxAgeNeedsItemsRadius I
+	FIELD x healthPoints Ljava/lang/String;
+	FIELD y spawn Ljava/lang/String;
+	FIELD z spawnMaxItems I
+	METHOD A isWallConnector ()Z
+	METHOD A setZoneMergerUp (Ljava/lang/String;)V
+	METHOD B isDoor ()Z
+	METHOD B setCanBeBuiltOnFloor (Ljava/lang/String;)V
+	METHOD C canBeEaten ()Z
 	METHOD C canBeBuildOnHoles (Ljava/lang/String;)V
+	METHOD D getHappiness ()I
 	METHOD D setCanBeUnlocked (Ljava/lang/String;)V
+	METHOD E isUsedToSleep ()Z
 	METHOD E setGlue (Ljava/lang/String;)V
+	METHOD F isUsedToSit ()Z
 	METHOD F setBase (Ljava/lang/String;)V
+	METHOD G zoneMergerUp ()Z
 	METHOD G setBlocky (Ljava/lang/String;)V
+	METHOD H canBeBuiltOnFoor ()Z
 	METHOD H setText (Ljava/lang/String;)V
 	METHOD I canBeBuiltOnHoles ()Z
 	METHOD I setLightRadius (Ljava/lang/String;)V
@@ -998,14 +1555,23 @@ CLASS xaos/tiles/entities/items/b xaos/tiles/entities/items/ItemManagerItem
 	METHOD M setTranslucent (Ljava/lang/String;)V
 	METHOD N isText ()Z
 	METHOD N setLocked (Ljava/lang/String;)V
+	METHOD O getLightRadius ()I
 	METHOD O setValue (Ljava/lang/String;)V
+	METHOD P getLightRed ()I
 	METHOD P setAlwaysOperative (Ljava/lang/String;)V
+	METHOD Q getLightGreen ()I
 	METHOD Q setLocation (Ljava/lang/String;)V
+	METHOD R getLightBlue ()I
 	METHOD R setAttack (Ljava/lang/String;)V
+	METHOD S isTranslucent ()Z
 	METHOD S setAttackSpeed (Ljava/lang/String;)V
+	METHOD T isLocked ()Z
 	METHOD T setWalkSpeed (Ljava/lang/String;)V
+	METHOD U getValue ()I
 	METHOD U setDefense (Ljava/lang/String;)V
+	METHOD V isAlwaysOperative ()Z
 	METHOD V setHealth (Ljava/lang/String;)V
+	METHOD W getLocation ()I
 	METHOD W setDamage (Ljava/lang/String;)V
 	METHOD X getAttack ()Ljava/lang/String;
 	METHOD X setLOS (Ljava/lang/String;)V
@@ -1013,8 +1579,10 @@ CLASS xaos/tiles/entities/items/b xaos/tiles/entities/items/ItemManagerItem
 	METHOD Y movePCT (Ljava/lang/String;)V
 	METHOD Z getWalkSpeed ()Ljava/lang/String;
 	METHOD Z setRanged (Ljava/lang/String;)V
+	METHOD a setLightRadius (I)V
 	METHOD a setLevel (Ljava/lang/String;)V
 	METHOD a setDescription (Ljava/util/ArrayList;)V
+	METHOD aA getBuryItemPCT ()Ljava/util/ArrayList;
 	METHOD aA setStackSize (Ljava/lang/String;)V
 	METHOD aB canBuryDestroyItems ()Z
 	METHOD aB setSpeedUpPCT (Ljava/lang/String;)V
@@ -1024,12 +1592,23 @@ CLASS xaos/tiles/entities/items/b xaos/tiles/entities/items/ItemManagerItem
 	METHOD aD setFoodValue (Ljava/lang/String;)V
 	METHOD aE canBeRotated ()Z
 	METHOD aE setFoodFilePCT (Ljava/lang/String;)V
+	METHOD aF getBuildAction ()Ljava/lang/String;
 	METHOD aF setFoodEatTime (Ljava/lang/String;)V
 	METHOD aG isContainer ()Z
 	METHOD aG setFoodEffects (Ljava/lang/String;)V
+	METHOD aH getContainerSize ()I
+	METHOD aH setLightValue (Ljava/lang/String;)I
 	METHOD aI isStackable ()Z
+	METHOD aJ getStackSize ()I
+	METHOD aK getSpeedUpPCT ()I
+	METHOD aL getFloorWalkSpeed ()I
+	METHOD aM isLocation ()Z
 	METHOD aN getFoodValue ()I
 	METHOD aO getFoodFilePCT ()I
+	METHOD aP getFoodEatTime ()I
+	METHOD aQ getFoodEffects ()Ljava/util/ArrayList;
+	METHOD aR getFoodStats ()Ljava/lang/String;
+	METHOD aS getAttackStats ()Ljava/lang/String;
 	METHOD aa getDefense ()Ljava/lang/String;
 	METHOD aa setRangedAmmo (Ljava/lang/String;)V
 	METHOD ab getHealth ()Ljava/lang/String;
@@ -1056,6 +1635,7 @@ CLASS xaos/tiles/entities/items/b xaos/tiles/entities/items/ItemManagerItem
 	METHOD al setBlockFluids (Ljava/lang/String;)V
 	METHOD am getAction ()Ljava/util/ArrayList;
 	METHOD am setFluidsElevator (Ljava/lang/String;)V
+	METHOD an hasActions ()Z
 	METHOD an setAllowFluids (Ljava/lang/String;)V
 	METHOD ao getZone ()Ljava/util/ArrayList;
 	METHOD ao setBury (Ljava/lang/String;)V
@@ -1067,6 +1647,7 @@ CLASS xaos/tiles/entities/items/b xaos/tiles/entities/items/ItemManagerItem
 	METHOD ar setBuryItemPCT (Ljava/lang/String;)V
 	METHOD as getTrapOnIcon ()Ljava/lang/String;
 	METHOD as setBuryDestroyItem (Ljava/lang/String;)V
+	METHOD at trapTargets ()Lxaos/data/b;
 	METHOD at setBuryLivings (Ljava/lang/String;)V
 	METHOD au canBlockFluids ()Z
 	METHOD au setBuryLivingsPCT (Ljava/lang/String;)V
@@ -1078,101 +1659,231 @@ CLASS xaos/tiles/entities/items/b xaos/tiles/entities/items/ItemManagerItem
 	METHOD ax setContainer (Ljava/lang/String;)V
 	METHOD ay getBuryLocked ()Z
 	METHOD ay setContainerSize (Ljava/lang/String;)V
+	METHOD az getBuryItem ()Ljava/util/ArrayList;
 	METHOD az setStackable (Ljava/lang/String;)V
 	METHOD b setName (Ljava/lang/String;)V
 	METHOD b setPrerequisite (Ljava/util/ArrayList;)V
+	METHOD c getLevel ()I
 	METHOD c setType (Ljava/lang/String;)V
+	METHOD d getName ()Ljava/lang/String;
 	METHOD d setBuilding (Ljava/lang/String;)V
 	METHOD d setHabitat (Ljava/util/ArrayList;)V
+	METHOD e getDescription ()Ljava/util/ArrayList;
 	METHOD e setBuildingTime (Ljava/lang/String;)V
+	METHOD e (Ljava/util/ArrayList;)V
+	METHOD f getType ()Ljava/lang/String;
 	METHOD f setHabitatGroup (Ljava/lang/String;)V
 	METHOD f setAction (Ljava/util/ArrayList;)V
+	METHOD g getBuilding ()Ljava/lang/String;
 	METHOD g setHabitatHeightMin (Ljava/lang/String;)V
 	METHOD g setZone (Ljava/util/ArrayList;)V
+	METHOD h getPrerequisites ()Ljava/util/ArrayList;
 	METHOD h setHabitatHeightMax (Ljava/lang/String;)V
+	METHOD i getBuildingTime ()I
 	METHOD i setMaxAge (Ljava/lang/String;)V
 	METHOD j setMaxAgeItem (Ljava/lang/String;)V
+	METHOD k getHabitat ()Ljava/util/ArrayList;
 	METHOD k setMaxAgeTerrain (Ljava/lang/String;)V
+	METHOD l getHabitatGroup ()Ljava/lang/String;
 	METHOD l setMaxAgeNeedsWater (Ljava/lang/String;)V
+	METHOD m getHabitatHeightMin ()I
 	METHOD m setMaxAgeNeedsWaterRadius (Ljava/lang/String;)V
+	METHOD n getHabitatHeightMax ()I
 	METHOD n setMaxAgeNeedsItems (Ljava/lang/String;)V
+	METHOD o getMaxAge ()Ljava/lang/String;
 	METHOD o setMaxAgeNeedsItemsRadius (Ljava/lang/String;)V
+	METHOD p getMaxAgeItem ()Ljava/lang/String;
 	METHOD p setHealthPoints (Ljava/lang/String;)V
+	METHOD q getMaxAgeTerrain ()Ljava/lang/String;
 	METHOD q setSpawn (Ljava/lang/String;)V
+	METHOD r getMaxAgeNeedsWater ()Z
 	METHOD r setSpawnMaxItems (Ljava/lang/String;)V
+	METHOD s getMaxAgeNeedsWaterRadius ()I
 	METHOD s setSpawnTurns (Ljava/lang/String;)V
+	METHOD t getMaxAgeNeedsItems ()Ljava/util/ArrayList;
 	METHOD t setWall (Ljava/lang/String;)V
+	METHOD u getMaxAgeNeedsItemsRadius ()I
 	METHOD u setWallConnector (Ljava/lang/String;)V
+	METHOD v getHealthPoints ()Ljava/lang/String;
 	METHOD v setDoor (Ljava/lang/String;)V
+	METHOD w getSpawn ()Ljava/lang/String;
 	METHOD w setCanBeEaten (Ljava/lang/String;)V
+	METHOD x getSpawnMaxItems ()I
 	METHOD x setHappiness (Ljava/lang/String;)V
+	METHOD y getSpawnTurns ()Ljava/lang/String;
 	METHOD y setUsedToSleep (Ljava/lang/String;)V
+	METHOD z isWall ()Z
 	METHOD z setUsedToSit (Ljava/lang/String;)V
 CLASS xaos/tiles/entities/living/a xaos/tiles/entities/living/LivingEntityManager
 	FIELD a livingEntities Ljava/util/HashMap;
+	FIELD b castTargets Ljava/util/HashMap;
+	METHOD a getLivingEntityManagerItem (I)Lxaos/tiles/entities/living/b;
 	METHOD a getLivingEntity (Ljava/lang/String;)Lxaos/tiles/entities/living/b;
 	METHOD a loadLivingEntities (Ljava/lang/String;Z)V
 		ARG 0 filePath
 	METHOD a getItemDrops (Lorg/w3c/dom/NodeList;)Ljava/util/ArrayList;
 	METHOD b clear ()V
+	METHOD b getCastTargets (Ljava/lang/String;)Lxaos/data/b;
 	METHOD c initLivingEntities ()V
 	METHOD c getLivingEntityItem (Ljava/lang/String;)Ljava/util/ArrayList;
 		ARG 0 name
 CLASS xaos/tiles/entities/living/b xaos/tiles/entities/living/LivingEntityManagerItem
+	FIELD A hate Ljava/lang/String;
+	FIELD B building Ljava/lang/String;
+	FIELD C buildingTime I
+	FIELD E enableAltGraphics Ljava/util/ArrayList;
+	FIELD F actions Ljava/util/ArrayList;
+	FIELD G facingDirections Z
+	FIELD H maxHungryTurns Ljava/lang/String;
+	FIELD I maxSleepTurns Ljava/lang/String;
+	FIELD J heroComePrerequisite Ljava/lang/String;
+	FIELD K heroStayPrequisite Ljava/lang/String;
+	FIELD L heroBehaviour Ljava/lang/String;
+	FIELD M heroSkills Ljava/lang/String;
+	FIELD N moral Ljava/lang/String;
+	FIELD O eatZone Ljava/lang/String;
+	FIELD P followEntity [I
+	FIELD Q followTurns Ljava/lang/String;
+	FIELD R effects Ljava/util/ArrayList;
+	FIELD S effectsImmuneList Ljava/util/ArrayList;
+	FIELD T evadeTraps Z
+	FIELD V steal [I
+	FIELD W stealLivings [I
+	FIELD X fxDead Ljava/lang/String;
+	FIELD Y foodNeeded [I
+	FIELD ab animateWhenIdle Z
+	FIELD ac workCounterPCT Ljava/lang/String;
+	FIELD ad idleCounterPCT Ljava/lang/String;
+	FIELD b type I
+	FIELD c level I
+	FIELD d name Ljava/lang/String;
+	FIELD e namePoolTag Ljava/lang/String;
+	FIELD f surnamePoolTag Ljava/lang/String;
+	FIELD g isFemale Z
+	FIELD h attack Ljava/lang/String;
+	FIELD i attackSpeed Ljava/lang/String;
+	FIELD j defense Ljava/lang/String;
+	FIELD k healthPoints Ljava/lang/String;
+	FIELD l attackVerb Ljava/lang/String;
+	FIELD m attackVerbInfinitive Ljava/lang/String;
+	FIELD n damage Ljava/lang/String;
+	FIELD o los Ljava/lang/String;
+	FIELD p movePCT Ljava/lang/String;
+	FIELD q walkSpeed Ljava/lang/String;
+	FIELD r grouping Z
+	FIELD s hpRegeneration I
+	FIELD t maxAge Ljava/lang/String;
+	FIELD u maxAgeLiving Ljava/lang/String;
+	FIELD v equips Ljava/util/ArrayList;
+	FIELD w allowedEquips Ljava/util/ArrayList;
+	FIELD x habitats Ljava/util/ArrayList;
+	FIELD y habitatHeightMin I
+	FIELD z habitatHeightMax I
+	METHOD A getBuilding ()Ljava/lang/String;
 	METHOD A setBuildingTime (Ljava/lang/String;)V
+	METHOD B getBuildingTime ()I
 	METHOD B setFacingDirections (Ljava/lang/String;)V
+	METHOD C ()Ljava/util/ArrayList;
 	METHOD C setMaxHungryTurns (Ljava/lang/String;)V
+	METHOD D getActionList ()Ljava/util/ArrayList;
 	METHOD D setMaxSleepTurns (Ljava/lang/String;)V
+	METHOD E hasActions ()Z
 	METHOD E setHeroComePrerequisite (Ljava/lang/String;)V
+	METHOD F getFacingDirections ()Z
 	METHOD F setHeroStayPrerequisite (Ljava/lang/String;)V
+	METHOD G getMaxHungryTurns ()Ljava/lang/String;
 	METHOD G setHeroBehaviour (Ljava/lang/String;)V
+	METHOD H getMaxSleepTurns ()Ljava/lang/String;
 	METHOD H setHeroSkills (Ljava/lang/String;)V
+	METHOD I getHeroComePrerequisite ()Ljava/lang/String;
 	METHOD I setMoral (Ljava/lang/String;)V
+	METHOD J getHeroStayPrequisite ()Ljava/lang/String;
 	METHOD J setEatZone (Ljava/lang/String;)V
+	METHOD K getHeroBehaviour ()Ljava/lang/String;
 	METHOD K setFollowEntity (Ljava/lang/String;)V
+	METHOD L getHeroSkills ()Ljava/lang/String;
 	METHOD L setFollowTurns (Ljava/lang/String;)V
+	METHOD M setMoral ()Ljava/lang/String;
 	METHOD M setEffects (Ljava/lang/String;)V
+	METHOD N getEatZone ()Ljava/lang/String;
 	METHOD N setEffectsImmune (Ljava/lang/String;)V
+	METHOD O getFollowEntity ()[I
 	METHOD O setEvadeTraps (Ljava/lang/String;)V
+	METHOD P getFollowTurns ()Ljava/lang/String;
 	METHOD P setCaravan (Ljava/lang/String;)V
+	METHOD Q getEffectsList ()Ljava/util/ArrayList;
 	METHOD Q setSteal (Ljava/lang/String;)V
+	METHOD R getEffectsImmuneList ()Ljava/util/ArrayList;
 	METHOD R setStealLivings (Ljava/lang/String;)V
+	METHOD S shouldEvadeTraps ()Z
 	METHOD S setFxDead (Ljava/lang/String;)V
 	METHOD T setFoodNeeded (Ljava/lang/String;)V
+	METHOD U getSteal ()[I
 	METHOD U setFoodNeededTurns (Ljava/lang/String;)V
+	METHOD V getStealLivings ()[I
 	METHOD V setFoodNeededDieTurns (Ljava/lang/String;)V
-	METHOD W setAnimatedWhenIdle (Ljava/lang/String;)V
+	METHOD W getFxDead ()Ljava/lang/String;
+	METHOD W setAnimateWhenIdle (Ljava/lang/String;)V
 	METHOD X setWorkCounterPCT (Ljava/lang/String;)V
 	METHOD Y setIdleCounterPCT (Ljava/lang/String;)V
+	METHOD Z ()I
+	METHOD a setItemDrops (Ljava/util/ArrayList;)V
+	METHOD aa shouldAnimateWhenIdle ()Z
+	METHOD ab getWorkCounterPCT ()Ljava/lang/String;
+	METHOD ac getIdleCounterPCT ()Ljava/lang/String;
 	METHOD b getType ()I
+	METHOD b (I)V
 	METHOD b setType (Ljava/lang/String;)V
-	METHOD b setEquip (Ljava/util/ArrayList;)V
+	METHOD b setEquipList (Ljava/util/ArrayList;)V
+	METHOD c getLevel ()I
 	METHOD c setLevel (Ljava/lang/String;)V
-	METHOD c setHabitat (Ljava/util/ArrayList;)V
+	METHOD c setHabitatList (Ljava/util/ArrayList;)V
+	METHOD d getName ()Ljava/lang/String;
 	METHOD d setName (Ljava/lang/String;)V
 	METHOD d setAltGraphics (Ljava/util/ArrayList;)V
+	METHOD e getNamePoolTag ()Ljava/lang/String;
 	METHOD e setNamePoolTag (Ljava/lang/String;)V
-	METHOD e setAction (Ljava/util/ArrayList;)V
+	METHOD e setActionList (Ljava/util/ArrayList;)V
+	METHOD f getSurnamePoolTag ()Ljava/lang/String;
 	METHOD f setSurnamePoolTag (Ljava/lang/String;)V
+	METHOD g getAttack ()Ljava/lang/String;
 	METHOD g setFemale (Ljava/lang/String;)V
+	METHOD h getAttackSpeed ()Ljava/lang/String;
 	METHOD h setAttack (Ljava/lang/String;)V
+	METHOD i getDefense ()Ljava/lang/String;
 	METHOD i setAttackSpeed (Ljava/lang/String;)V
+	METHOD j getHealthPoints ()Ljava/lang/String;
 	METHOD j setDefense (Ljava/lang/String;)V
+	METHOD k getAttackVerb ()Ljava/lang/String;
 	METHOD k setHealthPoints (Ljava/lang/String;)V
+	METHOD l getAttackVerbInfinitive ()Ljava/lang/String;
 	METHOD l setAttackVerb (Ljava/lang/String;)V
+	METHOD m getDamage ()Ljava/lang/String;
 	METHOD m setAttackVerbInfinitive (Ljava/lang/String;)V
+	METHOD n getLOS ()Ljava/lang/String;
 	METHOD n setDamage (Ljava/lang/String;)V
 	METHOD o setLOS (Ljava/lang/String;)V
+	METHOD p getMovePCT ()Ljava/lang/String;
 	METHOD p setMovePCT (Ljava/lang/String;)V
+	METHOD q getWalkSpeed ()Ljava/lang/String;
 	METHOD q setWalkSpeed (Ljava/lang/String;)V
+	METHOD r isHPRegenerationEnabled ()I
 	METHOD r setGrouping (Ljava/lang/String;)V
+	METHOD s getMaxAge ()Ljava/lang/String;
 	METHOD s setHPRegeneration (Ljava/lang/String;)V
+	METHOD t getMaxAgeLiving ()Ljava/lang/String;
 	METHOD t setMaxAge (Ljava/lang/String;)V
+	METHOD u getEquipList ()Ljava/util/ArrayList;
 	METHOD u setMaxAgeLiving (Ljava/lang/String;)V
+	METHOD v getAllowedEquipsList ()Ljava/util/ArrayList;
 	METHOD v setEquipAllowed (Ljava/lang/String;)V
+	METHOD w getHabitatList ()Ljava/util/ArrayList;
 	METHOD w setHabitatHeightMin (Ljava/lang/String;)V
+	METHOD x getHabitatHeightMin ()I
 	METHOD x setHabitatHeightMax (Ljava/lang/String;)V
+	METHOD y getHabitatHeightMax ()I
 	METHOD y setHate (Ljava/lang/String;)V
+	METHOD z getHate ()Ljava/lang/String;
 	METHOD z setBuilding (Ljava/lang/String;)V
 CLASS xaos/tiles/terrain/special/a xaos/tiles/terrain/special/TerrainLava
 	FIELD a TILES [Lxaos/tiles/Tile;
@@ -1242,10 +1953,20 @@ CLASS xaos/tiles/entities/living/Citizen
 	METHOD K getAction ()Lxaos/actions/Action;
 	METHOD O getItem ()Lxaos/tiles/entities/items/Item;
 	METHOD P getLivingEntity ()Lxaos/tiles/entities/living/LivingEntity;
+	METHOD T getCitizenData ()Lxaos/data/CitizenData;
+	METHOD U getSoldierData ()Lxaos/data/SoldierData;
 	METHOD a setAction (Lxaos/actions/Action;)V
 	METHOD a setTask (Lxaos/tasks/Task;)V
 	METHOD equals (Ljava/lang/Object;)Z
 		ARG 0 object
+	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
+		ARG 0 objectInput
+	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
+		ARG 0 objectOutput
+CLASS xaos/tiles/entities/items/Container
+	FIELD c type Lxaos/data/Type;
+	FIELD serialVersionUID serialVersionUID J
+	METHOD g getType ()Lxaos/data/Type;
 	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
 		ARG 0 objectInput
 	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
@@ -1324,6 +2045,8 @@ CLASS xaos/tiles/entities/buildings/Building
 		ARG 0 objectOutput
 CLASS xaos/tiles/entities/living/allies/Ally xaos/tiles/entities/living/allies/Ally
 	FIELD serialVersionUID serialVersionUID J
+	METHOD <init> (Ljava/lang/String;)V
+		ARG 0 id
 	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
 		ARG 0 objectInput
 	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
@@ -1344,6 +2067,9 @@ CLASS xaos/tiles/entities/living/LivingEntity
 	FIELD v focusData Lxaos/data/FocusData;
 	METHOD G toString ()Ljava/lang/String;
 	METHOD aC clear ()V
+	METHOD as getLivingEntityData ()Lxaos/data/LivingEntityData;
+	METHOD at getEquippedData ()Lxaos/data/EquippedData;
+	METHOD av getFocusData ()Lxaos/data/FocusData;
 	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
 	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V
 CLASS xaos/tiles/entities/special/CitSleeping xaos/tiles/entities/special/CitSleeping
@@ -1366,6 +2092,15 @@ CLASS xaos/tiles/entities/living/friendly/Friendly xaos/tiles/entities/living/fr
 CLASS xaos/tiles/entities/items/military/MilitaryItem
 	FIELD serialVersionUID serialVersionUID J
 	METHOD G toString ()Ljava/lang/String;
+	METHOD W getAttack ()I
+	METHOD X getAttackSpeed ()I
+	METHOD Y getWalkSpeed ()I
+	METHOD Z getDefense ()I
+	METHOD aa getHealthPoints ()I
+	METHOD ab getDamage ()I
+	METHOD ac getLOS ()I
+	METHOD ad getMovePCT ()I
+	METHOD af getColor ()Ljava/awt/Color;
 	METHOD readExternal readExternal (Ljava/io/ObjectInput;)V
 		ARG 0 objectInput
 	METHOD writeExternal writeExternal (Ljava/io/ObjectOutput;)V

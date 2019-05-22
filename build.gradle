@@ -17,101 +17,112 @@ buildscript {
         )
     }
 }
-repositories {
-    mavenCentral()
-    mavenLocal()
-    maven {
-        url = 'https://jitpack.io'
+
+allprojects {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+        maven {
+            url = 'https://jitpack.io'
+        }
+        maven {
+            url 'https://projectlombok.org/edge-releases'
+        }
     }
-    maven {
-        url 'https://projectlombok.org/edge-releases'
+
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'io.franzbecker.gradle-lombok'
+
+    sourceCompatibility = targetCompatibility = '1.8'
+
+    version = project.properties['version']
+    group = 'org.slave.lib'
+
+    lombok {
+        version = project.properties['lombok-version']
+        sha256 = ''//idk - do not set sha256
+    }
+
+    dependencies {
+        compile(
+                group: 'org.slave.lib',
+                name: 'lib',
+                version: project.properties['slave-lib-version']
+        )
+        compile(
+                group: 'org.slave.lib',
+                name: 'io',
+                version: project.properties['slave-lib-version']
+        )
+        compile(
+                group: 'org.slave.lib',
+                name: 'asm',
+                version: project.properties['slave-lib-version']
+        )
+
+        compile(
+                group: 'org.ow2.asm',
+                name: 'asm-debug-all',
+                version: project.properties['asm-version']
+        )
+        compile(
+                group: 'com.google.guava',
+                name: 'guava',
+                version: project.properties['guava-version']
+        )
+        compile(
+                group: 'commons-io',
+                name: 'commons-io',
+                version: '2.6'
+        )
+        /*
+        compile(
+                group: 'org.antlr',
+                name: 'antlr4-runtime',
+                version: '4.7.2'
+        )
+        */
+
+        implementation fileTree(
+                dir: 'libs',
+                exclude: [
+                        '*-src.jar'
+                ],
+                include: [
+                        'jna.jar',
+                        'lwjgl.jar',
+                        'lwjgl_util.jar',
+                        'platform.jar',
+                        'pngdecoder.jar',
+                        'slick-util.jar'
+                ]
+        )
+
+        implementation fileTree(
+                dir: 'depend',
+                include: [
+                        'xaos.jar'
+                ]
+        )
     }
 }
 
-apply plugin: 'java'
-apply plugin: 'idea'
-apply plugin: 'io.franzbecker.gradle-lombok'
+project(':') {
+    archivesBaseName = 'Citi'
 
-sourceCompatibility = targetCompatibility = '1.8'
-
-version = project.properties['version']
-group = 'org.slave.lib'
-archivesBaseName = 'Citi'
-
-jar {
-    manifest {
-        attributes 'Premain-Class': 'org.slave.citi.Agent'
-		attributes 'Can-Redefine-Classes': 'true'
-		attributes 'Can-Retransform-Classes': 'true'
-		attributes 'Created-By': 'Master801'
+    jar {
+        manifest {
+            attributes 'Premain-Class': 'org.slave.citi.Agent'
+            attributes 'Can-Redefine-Classes': 'true'
+            attributes 'Can-Retransform-Classes': 'true'
+            attributes 'Created-By': 'Master801'
+        }
     }
-}
 
-idea {
-    workspace {
-        //TODO Add run configuration
+    idea {
+        workspace {
+            //TODO Add run configuration
+        }
     }
-}
-
-dependencies {
-    compile(
-            group: 'org.slave.lib',
-            name: 'lib',
-            version: project.properties['slave-lib-version']
-    )
-    compile(
-            group: 'org.slave.lib',
-            name: 'io',
-            version: project.properties['slave-lib-version']
-    )
-    compile(
-            group: 'org.slave.lib',
-            name: 'asm',
-            version: project.properties['slave-lib-version']
-    )
-
-    compile(
-            group: 'org.ow2.asm',
-            name: 'asm-debug-all',
-            version: project.properties['asm-version']
-    )
-    compile(
-            group: 'com.google.guava',
-            name: 'guava',
-            version: project.properties['guava-version']
-    )
-    compile(
-            group: 'commons-io',
-            name: 'commons-io',
-            version: '2.6'
-    )
-    /*
-    compile(
-            group: 'org.antlr',
-            name: 'antlr4-runtime',
-            version: '4.7.2'
-    )
-    */
-
-    implementation fileTree(
-            dir: 'libs',
-            exclude: [
-                '*-src.jar'
-            ],
-            include: [
-                    'jna.jar',
-                    'lwjgl.jar',
-                    'lwjgl_util.jar',
-                    'platform.jar',
-                    'pngdecoder.jar',
-                    'slick-util.jar'
-            ]
-    )
-
-    implementation fileTree(
-            dir: 'depend',
-            include: [
-                    'xaos.jar'
-            ]
-    )
 }

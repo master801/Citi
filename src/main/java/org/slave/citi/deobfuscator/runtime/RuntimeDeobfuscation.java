@@ -17,7 +17,7 @@ public final class RuntimeDeobfuscation {
         //TODO
         Mapping mapping = new Mapping();
         try {
-            mapping.loadFromPath(new File(Citi.DIRECTORY_CITI, Mapping.MAPPING_FILE_NAME));
+            mapping.loadFromPath(new File(Citi.getDirectoryCiti(), Mapping.MAPPING_FILE_NAME));
         } catch(IOException e) {
             e.printStackTrace();
         }

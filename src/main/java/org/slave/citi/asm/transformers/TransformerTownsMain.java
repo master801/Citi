@@ -3,12 +3,14 @@ package org.slave.citi.asm.transformers;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.ClassNode;
 import org.slave.citi.Citi;
 import org.slave.citi.api.asm.Transformer;
+import org.slave.citi.api.event.stage.EventConstruction;
+import org.slave.citi.loader.CitiLoader;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,15 +43,17 @@ public final class TransformerTownsMain implements Transformer {
                                     public void visitFieldInsn(final int opcode, final String owner, final String name, final String desc) {
                                         super.visitFieldInsn(opcode, owner, name, desc);
 
-                                        if (opcode == Opcodes.PUTSTATIC && owner.equals(classNode.name) && name.equals("d") && desc.equals("I")) {
-                                            //Fire preInitialization stage for mods
-                                            super.visitLabel(new Label());
-                                            super.visitFieldInsn(Opcodes.GETSTATIC, "org/slave/citi/loader/CitiLoader", "INSTANCE", "Lorg/slave/citi/loader/CitiLoader;");
-                                            super.visitTypeInsn(Opcodes.NEW, "org/slave/citi/api/stage/StagePreInitialization");
-                                            super.visitInsn(Opcodes.DUP);
-                                            super.visitVarInsn(Opcodes.ALOAD, 0);
-                                            super.visitMethodInsn(Opcodes.INVOKESPECIAL, "org/slave/citi/api/stage/StagePreInitialization", "<init>", "(Lxaos/main/a;)V", false);
-                                            super.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "org/slave/citi/loader/CitiLoader", "fireStage", "(Lorg/slave/citi/api/stage/Stage;)V", false);
+                                        if (opcode == Opcodes.PUTSTATIC && owner.equals(classNode.name)) {
+                                            if (name.equals("d") && desc.equals(Type.INT_TYPE.getDescriptor())) {
+                                                //Fire preInitialization stage for mods
+                                                super.visitFieldInsn(Opcodes.GETSTATIC, "org/slave/citi/loader/CitiLoader", "INSTANCE", "Lorg/slave/citi/loader/CitiLoader;");
+                                                super.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "org/slave/citi/loader/CitiLoader", "getEventBus", "()Lcom/google/common/eventbus/EventBus;", false);
+                                                super.visitTypeInsn(Opcodes.NEW, "org/slave/citi/api/event/EventPreInitialization");
+                                                super.visitInsn(Opcodes.DUP);
+                                                super.visitVarInsn(Opcodes.ALOAD, 0);
+                                                super.visitMethodInsn(Opcodes.INVOKESPECIAL, "org/slave/citi/api/event/EventPreInitialization", "<init>", "(Lxaos/main/a;)V", false);
+                                                super.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "com/google/common/eventbus/EventBus", "post", "(Ljava/lang/Object;)V", false);
+                                            }
                                         }
                                     }
 
@@ -58,28 +62,32 @@ public final class TransformerTownsMain implements Transformer {
                                         super.visitMethodInsn(opcode, owner, name, desc, itf);
 
                                         if (opcode == Opcodes.INVOKESTATIC && owner.equals("xaos/actions/a") && name.equals("a") && desc.equals("(II)V")) {
-                                            //Load mods
-                                            super.visitLabel(new Label());
+                                            //Fire initialization stage
                                             super.visitFieldInsn(Opcodes.GETSTATIC, "org/slave/citi/loader/CitiLoader", "INSTANCE", "Lorg/slave/citi/loader/CitiLoader;");
-                                            super.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "org/slave/citi/loader/CitiLoader", "loadMods", "()V", false);
-
-                                            //Fire initialization stage for mods
-                                            super.visitLabel(new Label());
-                                            super.visitFieldInsn(Opcodes.GETSTATIC, "org/slave/citi/loader/CitiLoader", "INSTANCE", "Lorg/slave/citi/loader/CitiLoader;");
-                                            super.visitTypeInsn(Opcodes.NEW, "org/slave/citi/api/stage/StageInitialization");
+                                            super.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "org/slave/citi/loader/CitiLoader", "getEventBus", "()Lcom/google/common/eventbus/EventBus;", false);
+                                            super.visitTypeInsn(Opcodes.NEW, "org/slave/citi/api/event/EventInitialization");
                                             super.visitInsn(Opcodes.DUP);
                                             super.visitVarInsn(Opcodes.ALOAD, 0);
-                                            super.visitMethodInsn(Opcodes.INVOKESPECIAL, "org/slave/citi/api/stage/StageInitialization", "<init>", "(Lxaos/main/a;)V", false);
-                                            super.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "org/slave/citi/loader/CitiLoader", "fireStage", "(Lorg/slave/citi/api/stage/Stage;)V", false);
+                                            super.visitMethodInsn(Opcodes.INVOKESPECIAL, "org/slave/citi/api/event/EventInitialization", "<init>", "(Lxaos/main/a;)V", false);
+                                            super.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "com/google/common/eventbus/EventBus", "post", "(Ljava/lang/Object;)V", false);
                                         } else if (opcode == Opcodes.INVOKEVIRTUAL && owner.equals("xaos/panels/c") && name.equals("b") && desc.equals("(Z)V")) {
-                                            //Fire postInitialization stage for mods
-                                            super.visitLabel(new Label());
+                                            //Fire postInitialization stage
                                             super.visitFieldInsn(Opcodes.GETSTATIC, "org/slave/citi/loader/CitiLoader", "INSTANCE", "Lorg/slave/citi/loader/CitiLoader;");
-                                            super.visitTypeInsn(Opcodes.NEW, "org/slave/citi/api/stage/StagePostInitialization");
+                                            super.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "org/slave/citi/loader/CitiLoader", "getEventBus", "()Lcom/google/common/eventbus/EventBus;", false);
+                                            super.visitTypeInsn(Opcodes.NEW, "org/slave/citi/api/event/EventPostInitialization");
                                             super.visitInsn(Opcodes.DUP);
                                             super.visitVarInsn(Opcodes.ALOAD, 0);
-                                            super.visitMethodInsn(Opcodes.INVOKESPECIAL, "org/slave/citi/api/stage/StagePostInitialization", "<init>", "(Lxaos/main/a;)V", false);
-                                            super.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "org/slave/citi/loader/CitiLoader", "fireStage", "(Lorg/slave/citi/api/stage/Stage;)V", false);
+                                            super.visitMethodInsn(Opcodes.INVOKESPECIAL, "org/slave/citi/api/event/EventPostInitialization", "<init>", "(Lxaos/main/a;)V", false);
+                                            super.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "com/google/common/eventbus/EventBus", "post", "(Ljava/lang/Object;)V", false);
+                                        } else if (opcode == Opcodes.INVOKESPECIAL && owner.equals("java/lang/Object") && name.equals("<init>") && desc.equals("()V")) {
+                                            //Fire construction stage
+                                            super.visitFieldInsn(Opcodes.GETSTATIC, "org/slave/citi/loader/CitiLoader", "INSTANCE", "Lorg/slave/citi/loader/CitiLoader;");
+                                            super.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "org/slave/citi/loader/CitiLoader", "getEventBus", "()Lcom/google/common/eventbus/EventBus;", false);
+                                            super.visitTypeInsn(Opcodes.NEW, "org/slave/citi/api/event/EventConstruction");
+                                            super.visitInsn(Opcodes.DUP);
+                                            super.visitVarInsn(Opcodes.ALOAD, 0);
+                                            super.visitMethodInsn(Opcodes.INVOKESPECIAL, "org/slave/citi/api/event/EventConstruction", "<init>", "(Lxaos/main/a;)V", false);
+                                            super.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "com/google/common/eventbus/EventBus", "post", "(Ljava/lang/Object;)V", false);
                                         }
                                     }
 
@@ -105,6 +113,16 @@ public final class TransformerTownsMain implements Transformer {
             return newClassData;
         }
         return original;
+    }
+
+    private static final class x {
+
+        private xaos.main.a a;
+
+        private void xx() {
+            CitiLoader.INSTANCE.getEventBus().post(new EventConstruction(a));
+        }
+
     }
 
 }
