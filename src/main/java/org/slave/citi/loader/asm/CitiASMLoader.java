@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.slave.citi.api.asm.ASM;
-import org.slave.citi.api.asm.Transformer;
+import org.slave.lib.api.asm.Transformer;
 
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Constructor;

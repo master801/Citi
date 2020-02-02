@@ -83,6 +83,7 @@ allprojects {
                 version: '4.7.2'
         )
         */
+        runtimeOnly group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.21'
 
         implementation fileTree(
                 dir: 'libs',
@@ -99,11 +100,15 @@ allprojects {
                 ]
         )
 
-        implementation fileTree(
+        String xaos_jar = 'xaos.jar'
+        final String deobfName = 'xaos_deobf.jar'
+        if (file('depend/' + deobfName).exists()) {
+//            xaos_jar = deobfName
+        }
+        
+        compile fileTree(
                 dir: 'depend',
-                include: [
-                        'xaos.jar'
-                ]
+                include: xaos_jar
         )
     }
 }

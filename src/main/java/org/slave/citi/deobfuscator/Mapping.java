@@ -1,8 +1,13 @@
 package org.slave.citi.deobfuscator;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.slave.citi.Citi;
-import org.slave.citi.deobfuscator.Mapping.MappingEntryClass.MappingEntryField;
+import org.slave.lib.helpers.ArrayHelper;
+import org.slave.lib.resources.Obfuscation;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,7 +15,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Master on 5/17/19 at 9:57 AM
@@ -21,6 +29,9 @@ public final class Mapping {
 
     public static final String MAPPING_FILE_VERSION = "14e";
     public static final String MAPPING_FILE_NAME = String.format("Towns_%s.mapping", MAPPING_FILE_VERSION);
+
+    @Getter
+    private ImmutableList<MappingEntryClass> mappingEntryList;
 
     public void loadFromPath(final File filePath) throws IOException {
         FileInputStream fileInputStream = new FileInputStream(filePath);
@@ -45,82 +56,137 @@ public final class Mapping {
         String iteratingLine;
         while((iteratingLine = bufferedReader.readLine()) != null) lines.add(iteratingLine);
 
+        Map<Type, List<MappingEntry>> cache = Maps.newEnumMap(Type.class);
+        Arrays.stream(Type.values()).forEach(type -> cache.put(type, Lists.newArrayList()));
+
         List<MappingEntryClass> mappingEntryClassList = new ArrayList<>();
-        int toNext = -1;
-        for(int i = 0; i < lines.size(); ++i) {
-            String line = lines.get(i);
+        for(String line : lines) {
+            String newLine;
+            if (line.startsWith("\t")) {
+                newLine = line.substring(line.lastIndexOf('\t') + 1);
+            } else {
+                newLine = line;
+            }
 
-            int indent = 0;
-            if (line.startsWith("\t")) indent = line.lastIndexOf('\t');
-
-            boolean isChild = indent > 1;
-
-            String[] parts = line.split(" ");
-            Type type = Type.from(isChild ? parts[0].substring(indent + 1) : parts[0]);
-
-            String[] names = null;
-            if (type == Type.CLASS) {
-                names = new String[2];
-                System.arraycopy(parts, 1, names, 0, 2);
-
-                int next = i + 1;
-                MappingEntryClass mappingEntryClass = new MappingEntryClass(names);
-
-                String nextLine;
-                while((nextLine = lines.get(next)) != null) {
-                    next += 1;
-
-                    String[] nextParts = nextLine.split(" ");
-
-                    String nextTypeName = nextParts[0];
-                    if (nextTypeName.startsWith("\t")) nextTypeName = nextTypeName.substring(nextTypeName.lastIndexOf('\t') + 1);
-                    Type nextType = Type.from(nextTypeName);
-
-                    if (nextType == Type.CLASS) {//Ignore class
-                        break;
-                    }
-
-                    if (nextType == Type.FIELD) {
-                        mappingEntryClass.fields.add(
-                                new MappingEntryField(null, null)
-                        );
-                    } else if (nextType == Type.METHOD) {
-                    }
-
-                    Citi.LOGGER_CITI.info("");
+            String[] parts = newLine.split(" ");
+            if (newLine.startsWith(Type.CLASS.id)) {
+                if (cache.get(Type.CLASS).size() == 1) {
+                    MappingEntryClass mappingEntryClass = (MappingEntryClass)cache.get(Type.CLASS).get(0);
+                    for (MappingEntry e : cache.get(Type.FIELD)) mappingEntryClass.fields.add((MappingEntryClass.MappingEntryField) e);
+                    for (MappingEntry e : cache.get(Type.METHOD)) mappingEntryClass.methods.add((MappingEntryClass.MappingEntryMethod) e);
+                    mappingEntryClassList.add(mappingEntryClass);
+                    Arrays.stream(Type.values()).forEach(type -> cache.get(type).clear());
+                }
+                cache.get(Type.CLASS).add(parseMappingEntry(Type.CLASS, parts));
+            } else if (line.startsWith("\t")) {
+                Type type = Type.from(parts[0]);
+                if (type == null) {
+                    Citi.LOGGER_CITI.severe("");
+                    continue;
+                }
+                MappingEntry mappingEntry = parseMappingEntry(type, parts);
+                if (mappingEntry == null) {
+                    Citi.LOGGER_CITI.severe("");
+                    continue;
+                }
+                if (type == Type.ARG) {
+                    MappingEntryClass.MappingEntryMethod mappingEntryMethod = (MappingEntryClass.MappingEntryMethod)cache.get(Type.METHOD).get(cache.get(Type.METHOD).size() - 1);
+                    mappingEntryMethod.args.add((MappingEntryClass.MappingEntryMethod.MappingEntryMethodArg)mappingEntry);
+                } else {
+                    cache.get(type).add(mappingEntry);
                 }
             }
-            Citi.LOGGER_CITI.info("");
         }
+
+        MappingEntryClass mappingEntryClass = (MappingEntryClass)cache.get(Type.CLASS).get(0);
+        for (MappingEntry e : cache.get(Type.FIELD)) mappingEntryClass.fields.add((MappingEntryClass.MappingEntryField) e);
+        for (MappingEntry e : cache.get(Type.METHOD)) mappingEntryClass.methods.add((MappingEntryClass.MappingEntryMethod) e);
+        mappingEntryClassList.add(mappingEntryClass);//Last cached class
+        Arrays.stream(Type.values()).forEach(type -> cache.get(type).clear());
+
+        mappingEntryList = ImmutableList.<MappingEntryClass>builder().addAll(mappingEntryClassList).build();
+    }
+
+    private MappingEntry parseMappingEntry(final Type type, final String[] parts) {
+        if (type == null || ArrayHelper.isNullOrEmpty(parts)) return null;
+        switch(type) {
+            case CLASS:
+                if (parts.length == 2 || parts.length == 3) {
+                    EnumMap<Obfuscation, String> map = Maps.newEnumMap(Obfuscation.class);
+                    map.put(Obfuscation.OBFUSCATED, parts[1]);
+                    map.put(Obfuscation.DEOBFUSCATED, parts.length == 3 ? parts[2] : null);
+                    return new MappingEntryClass(map);
+                }
+            case FIELD:
+                if (parts.length == 4) {
+                    EnumMap<Obfuscation, String> map = Maps.newEnumMap(Obfuscation.class);
+                    map.put(Obfuscation.OBFUSCATED, parts[1]);
+                    map.put(Obfuscation.DEOBFUSCATED, parts[2]);
+                    return new MappingEntryClass.MappingEntryField(map, parts[3]);
+                }
+                break;
+            case METHOD:
+                if (parts.length == 3 || parts.length == 4) {
+                    EnumMap<Obfuscation, String> map = Maps.newEnumMap(Obfuscation.class);
+                    map.put(Obfuscation.OBFUSCATED, parts[1]);
+                    map.put(Obfuscation.DEOBFUSCATED, parts.length == 4 ? parts[2] : null);
+                    return new MappingEntryClass.MappingEntryMethod(map, parts.length == 4 ? parts[3] : parts[2]);
+                }
+                break;
+            case ARG:
+                if (parts.length == 3) {
+                    return new MappingEntryClass.MappingEntryMethod.MappingEntryMethodArg(Integer.parseInt(parts[1]), parts[2]);
+                }
+                break;
+        }
+        return null;
+    }
+
+    interface MappingEntry {
     }
 
     @RequiredArgsConstructor
-    static final class MappingEntryClass {
+    static final class MappingEntryClass implements MappingEntry {
 
-        private final String[] names;
+        @Getter
+        private final EnumMap<Obfuscation, String> names;
 
+        @Getter
         private final List<MappingEntryField> fields = new ArrayList<>();
+
+        @Getter
         private final List<MappingEntryMethod> methods = new ArrayList<>();
 
         @RequiredArgsConstructor
-        static final class MappingEntryField {
+        static final class MappingEntryField implements MappingEntry {
 
-            private final String[] names;
+            @Getter
+            private final EnumMap<Obfuscation, String> names;
+
+            @Getter
             private final String desc;
 
         }
 
         @RequiredArgsConstructor
-        static final class MappingEntryMethod {
+        static final class MappingEntryMethod implements MappingEntry {
 
-            private final String[] names;
+            @Getter
+            private final EnumMap<Obfuscation, String> names;
+
+            @Getter
             private final String desc;
+
+            @Getter
             private final List<MappingEntryMethodArg> args = new ArrayList<>();
 
             @RequiredArgsConstructor
-            static final class MappingEntryMethodArg {
+            static final class MappingEntryMethodArg implements MappingEntry {
 
+                @Getter
                 private final int varIndex;
+
+                @Getter
                 private final String name;
 
             }

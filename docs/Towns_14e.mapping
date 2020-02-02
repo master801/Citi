@@ -369,15 +369,23 @@ CLASS xaos/Towns xaos/Towns
 	FIELD c propertyFiles [I
 	METHOD a getPropertiesGraphics ()Ljava/util/Properties;
 	METHOD a getProperty (Ljava/lang/String;)Ljava/lang/String;
+		ARG 0 propName
 	METHOD a getPropertyAsInt (Ljava/lang/String;I)I
+		ARG 0 propName
+		ARG 1 _default
 	METHOD a getPropertyAsInt (Lxaos/property/PropertyFile;Ljava/lang/String;)I
 		ARG 0 propertyFile
+		ARG 1 propName
 	METHOD a getPropertyAsInt (Lxaos/property/PropertyFile;Ljava/lang/String;I)I
+		ARG 1 propName
+		ARG 2 _default
 	METHOD a serializeObject (Lxaos/property/b;Ljava/lang/Object;)Ljava/lang/Object;
+		ARG 1 object
 	METHOD b clearPropertiesGraphics ()V
 	METHOD b initSteamApi (Ljava/lang/String;)Z
 		ARG 0 name
 	METHOD b getPropertyDefault (Lxaos/property/PropertyFile;Ljava/lang/String;)Ljava/lang/String;
+		ARG 1 propName
 	METHOD c loadPropertiesGraphics ()V
 	METHOD d getPropertyFiles ()[I
 	METHOD main main ([Ljava/lang/String;)V

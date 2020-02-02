@@ -1,10 +1,13 @@
 package org.slave.citi;
 
-import org.slave.citi.api.asm.Transformer;
+import org.slave.citi.asm.transformers.TransformerPanelMainMenu;
 import org.slave.citi.asm.transformers.TransformerTowns;
 import org.slave.citi.asm.transformers.TransformerTownsMain;
 import org.slave.citi.deobfuscator.runtime.RuntimeDeobfuscation;
 import org.slave.citi.loader.asm.CitiASMLoader;
+import org.slave.lib.api.asm.Transformer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.lang.instrument.Instrumentation;
@@ -15,7 +18,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Created by Master801 on 3/18/2016 at 6:12 AM.
@@ -28,13 +30,15 @@ public final class Agent {
 
     private static final Class<? extends Transformer>[] CLASSES_TRANSFORMER = new Class[] {
             TransformerTowns.class,
-            TransformerTownsMain.class
+            TransformerTownsMain.class,
+
+            TransformerPanelMainMenu.class
     };
 
-    public static final Logger LOGGER_CITI_AGENT = Logger.getLogger("Citi-Agent");
+    public static final Logger LOGGER_CITI_AGENT = LoggerFactory.getLogger("Citi-Agent");
 
     public static void premain(final String agentArguments, final Instrumentation instrumentation) {
-        Agent.LOGGER_CITI_AGENT.log(Level.INFO, "Citi Agent version: " + CITI_AGENT_VERSION);
+        Agent.LOGGER_CITI_AGENT.info("Citi Agent version: {}", CITI_AGENT_VERSION);
         Citi.init();
         if (!Agent.loadLibraries()) {
             System.out.println("Could not load library files... not starting Citi...");
@@ -43,7 +47,7 @@ public final class Agent {
 
         //Runtime deobfuscation
         RuntimeDeobfuscation runtimeDeobfuscation = new RuntimeDeobfuscation();
-//        runtimeDeobfuscation.deobfuscate();//TODO
+        runtimeDeobfuscation.deobfuscate();//TODO
 
         //Transformers
         for(Class<? extends Transformer> classTransformer : CLASSES_TRANSFORMER) {
@@ -52,7 +56,7 @@ public final class Agent {
                 Transformer transformer = constructor.newInstance();
 
                 instrumentation.addTransformer(
-                        (loader, className, classBeingRedefined, protectionDomain, classfileBuffer) -> transformer.transform(className, className, classfileBuffer)
+                        (loader, className, classBeingRedefined, protectionDomain, classfileBuffer) -> transformer.transform(classfileBuffer, className, className)
                 );
             } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
                 Agent.LOGGER_CITI_AGENT.info("Caught exception while adding transformer!");
@@ -60,12 +64,13 @@ public final class Agent {
             }
         }
 
-        CitiASMLoader.INSTANCE.sortTransformers();
+
         try {
             CitiASMLoader.INSTANCE.loadTransformers(instrumentation);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
             CitiASMLoader.LOGGER_CITI_ASM.log(Level.SEVERE, "Failed to load transformer due to caught exception!", e);
         }
+        CitiASMLoader.INSTANCE.sortTransformers();
     }
 
     private static boolean loadLibraries() {

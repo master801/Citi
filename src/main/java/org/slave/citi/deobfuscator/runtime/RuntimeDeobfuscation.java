@@ -20,6 +20,7 @@ public final class RuntimeDeobfuscation {
             mapping.loadFromPath(new File(Citi.getDirectoryCiti(), Mapping.MAPPING_FILE_NAME));
         } catch(IOException e) {
             e.printStackTrace();
+            return;
         }
     }
 

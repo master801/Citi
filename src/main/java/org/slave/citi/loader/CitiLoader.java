@@ -94,7 +94,7 @@ public final class CitiLoader {
                     try {
                         asmClass = CitiClassLoader.getCitiClassLoader().loadClass(tableClass.getName());
                     } catch (ClassNotFoundException e) {
-                        Agent.LOGGER_CITI_AGENT.log(Level.SEVERE, "Caught exception while loading ASM class! Exception: %s", e.toString());
+                        Agent.LOGGER_CITI_AGENT.error("Caught exception while loading ASM class!", e);
                     }
 
                     if (asmClass != null) {
@@ -114,7 +114,7 @@ public final class CitiLoader {
                     try {
                         modClass = CitiClassLoader.getCitiClassLoader().loadClass(tableClass.getName().replace('/', '.'));
                     } catch (ClassNotFoundException e) {
-                        Agent.LOGGER_CITI_AGENT.log(Level.SEVERE, "Caught exception while loading Mod class! Exception: %s", e.toString());
+                        Agent.LOGGER_CITI_AGENT.error("Caught exception while loading Mod class!", e);
                     }
 
                     if (modClass != null) {
