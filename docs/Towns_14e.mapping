@@ -415,6 +415,8 @@ CLASS xaos/data/b xaos/data/CastTargets
 	FIELD i isHero Z
 	FIELD j isPleb Z
 	METHOD a (Lxaos/tiles/entities/living/LivingEntity;)Z
+CLASS xaos/data/c
+	METHOD a clear ()V
 CLASS xaos/main/a xaos/main/TownsMain
 	FIELD A disableGods Z
 	FIELD B pauseWhenStarted Z
@@ -496,6 +498,7 @@ CLASS xaos/main/a xaos/main/TownsMain
 	METHOD d getPanelOpening ()Lxaos/panels/c;
 	METHOD d setPathfindingLevel (I)V
 	METHOD d addServer (Ljava/lang/String;)V
+	METHOD d setPause (Z)V
 	METHOD e removeServer (Ljava/lang/String;)V
 	METHOD e enableMusic (Z)V
 		ARG 0 enableMusic
@@ -514,6 +517,7 @@ CLASS xaos/main/a xaos/main/TownsMain
 	METHOD k clearTask ()V
 	METHOD k setDisableGods (Z)V
 	METHOD l setPauseWhenStarted (Z)V
+	METHOD m isPaused ()Z
 	METHOD m shouldAllowSeigePause (Z)V
 	METHOD n shouldAllowCaravanPause (Z)V
 	METHOD o isMusicEnabled ()Z
@@ -538,14 +542,17 @@ CLASS xaos/utils/b xaos/utils/Path
 CLASS xaos/utils/c xaos/utils/CharFontData
 	FIELD d width S
 CLASS xaos/utils/d xaos/utils/ImageFile
+	FIELD a filePath Ljava/lang/String;
 	FIELD b height I
 	FIELD c width I
 	FIELD d pixelData Ljava/nio/ByteBuffer;
+	FIELD e internalFormat I
 	METHOD <init> (Ljava/lang/String;IILjava/nio/ByteBuffer;I)V
 		ARG 3 pixelData
 	METHOD a getFilePath ()Ljava/lang/String;
 	METHOD b getHeight ()I
 	METHOD c getWidth ()I
+	METHOD d getInternalFormat ()I
 	METHOD e getPixelData ()Ljava/nio/ByteBuffer;
 	METHOD f clearPixelData ()V
 CLASS xaos/utils/e xaos/utils/LanguageFile
@@ -617,7 +624,7 @@ CLASS xaos/utils/o xaos/utils/DataManager
 	METHOD k splitToList (Ljava/lang/String;)Ljava/util/ArrayList;
 	METHOD l getResourceBundle (Ljava/lang/String;)Ljava/util/ResourceBundle;
 		ARG 0 locale
-CLASS xaos/utils/p xaos/utils/GLManager
+CLASS xaos/utils/p xaos/utils/UtilsGL
 	FIELD c nextTextureID I
 	FIELD d textureIDs Ljava/util/Deque;
 	FIELD e IMAGE_FILES Ljava/util/HashMap;
@@ -795,6 +802,8 @@ CLASS xaos/panels/j
 	FIELD bN menu Lxaos/panels/menus/SmartMenu;
 	FIELD bW tileBottomItem Lxaos/tiles/Tile;
 	FIELD bX tileBottomItemSm Lxaos/tiles/Tile;
+	FIELD bY tileBottomScrLeft Lxaos/tiles/Tile;
+	FIELD bZ tileBottomScrLeftON Lxaos/tiles/Tile;
 	FIELD cA menuProduction Lxaos/panels/menus/SmartMenu;
 	FIELD cP tileIconTradePanel [Lxaos/tiles/Tile;
 	FIELD cU tileScrollUpDisabled Lxaos/tiles/Tile;

@@ -9,15 +9,14 @@ import org.slave.citi.Citi;
 import org.slave.citi.api.LoadType;
 import org.slave.citi.api.Mod;
 import org.slave.citi.api.asm.ASM;
-import org.slave.citi.api.event.stage.EventStage;
 import org.slave.citi.api.event.stage.EventConstruction;
+import org.slave.citi.api.event.stage.EventStage;
 import org.slave.citi.loader.asm.CitiASMLoader;
 import org.slave.lib.resources.ASMTable.TableClass;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 public final class CitiLoader {
 
@@ -46,7 +45,7 @@ public final class CitiLoader {
         }
 
         for(CitiModContainer modContainer : modContainerList) {
-            Citi.LOGGER_CITI.log(Level.FINE, "Sending event %s to mod %s during stage %s", new Object[] { event.getName(), modContainer.getName(), event.getStage().name() });
+            Citi.LOGGER_CITI.debug("Sending event {} to mode {} during stage {}", event.getName(), modContainer.getName(), event.getStage().name());
             eventBusMods.post(event);
         }
     }
@@ -61,7 +60,7 @@ public final class CitiLoader {
         modDiscoverer.findMods(Citi.getDirectoryCitiMods());
 
         if (modDiscoverer.getModCandidates().size() > 0) {
-            Citi.LOGGER_CITI.info(String.format("Found %d candidate mods!", modDiscoverer.getModCandidates().size()));
+            Citi.LOGGER_CITI.info("Found {} candidate mod(s)!", modDiscoverer.getModCandidates().size());
         } else {
             Citi.LOGGER_CITI.info("Found no mods");
         }
@@ -120,7 +119,7 @@ public final class CitiLoader {
                     if (modClass != null) {
                         Mod mod = modClass.getAnnotation(Mod.class);
                         modContainer.setName(mod.name());
-                        modContainer.setName(mod.version());
+                        modContainer.setVersion(mod.version());
 
                         modContainer.setLoadType(LoadType.MOD);
                         modContainer.setMainClass(modClass);

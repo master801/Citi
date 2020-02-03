@@ -1,21 +1,5 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        maven {
-            name = 'sonatype'
-            url = 'https://oss.sonatype.org/content/repositories/snapshots/'
-        }
-        maven {
-            url 'https://plugins.gradle.org/m2/'
-        }
-    }
-    dependencies {
-        classpath(
-                group: 'io.franzbecker',
-                name: 'gradle-lombok',
-                version: '1.8'
-        )
-    }
+plugins {
+    id 'io.freefair.lombok' version '4.1.6'
 }
 
 allprojects {
@@ -25,24 +9,16 @@ allprojects {
         maven {
             url = 'https://jitpack.io'
         }
-        maven {
-            url 'https://projectlombok.org/edge-releases'
-        }
     }
 
     apply plugin: 'java'
     apply plugin: 'idea'
-    apply plugin: 'io.franzbecker.gradle-lombok'
+    apply plugin: 'io.freefair.lombok'
 
     sourceCompatibility = targetCompatibility = '1.8'
 
     version = project.properties['version']
     group = 'org.slave.lib'
-
-    lombok {
-        version = project.properties['lombok-version']
-        sha256 = ''//idk - do not set sha256
-    }
 
     dependencies {
         compile(
@@ -76,14 +52,11 @@ allprojects {
                 name: 'commons-io',
                 version: '2.6'
         )
-        /*
-        compile(
-                group: 'org.antlr',
-                name: 'antlr4-runtime',
-                version: '4.7.2'
+        runtimeOnly(
+                group: 'org.slf4j',
+                name: 'slf4j-jdk14',
+                version: '2.0.0-alpha1'
         )
-        */
-        runtimeOnly group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.21'
 
         implementation fileTree(
                 dir: 'libs',

@@ -1,11 +1,11 @@
 package org.slave.citi;
 
 import lombok.experimental.UtilityClass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @UtilityClass
 public final class Citi {
@@ -20,13 +20,13 @@ public final class Citi {
     private static File fileDirectoryCitiConfig;
     private static File fileDirectoryCitiMods;
 
-    public static final Logger LOGGER_CITI = Logger.getLogger("Citi");
+    public static final Logger LOGGER_CITI = LoggerFactory.getLogger("Citi");
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void init() {
         if (!Citi.getDirectoryCiti().exists()) Citi.getDirectoryCiti().mkdirs();
         if (!Citi.getDirectoryCitiLibs().exists() && !DEBUG) {
-            LOGGER_CITI.log(Level.SEVERE, "Folder \'libs\' was not found?!");
+            Citi.LOGGER_CITI.error("Folder \"libs\" was not found?!");
             return;
         }
         if (!Citi.getDirectoryCitiConfig().exists()) Citi.getDirectoryCitiConfig().mkdir();
@@ -40,7 +40,7 @@ public final class Citi {
                 field.setAccessible(true);
                 Citi.fileDirectoryStart = (File)field.get(null);
             } catch(NoSuchFieldException | IllegalAccessException e) {
-                LOGGER_CITI.log(Level.SEVERE, "Failed to get start directory due to an exception!", e);
+                Citi.LOGGER_CITI.error("Failed to get start directory due to an exception!", e);
             }
         }
         return Citi.fileDirectoryStart;

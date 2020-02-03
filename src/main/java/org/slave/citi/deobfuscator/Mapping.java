@@ -81,12 +81,12 @@ public final class Mapping {
             } else if (line.startsWith("\t")) {
                 Type type = Type.from(parts[0]);
                 if (type == null) {
-                    Citi.LOGGER_CITI.severe("");
+                    Citi.LOGGER_CITI.debug("");
                     continue;
                 }
                 MappingEntry mappingEntry = parseMappingEntry(type, parts);
                 if (mappingEntry == null) {
-                    Citi.LOGGER_CITI.severe("");
+                    Citi.LOGGER_CITI.debug("");
                     continue;
                 }
                 if (type == Type.ARG) {

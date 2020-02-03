@@ -41,7 +41,7 @@ public final class CitiASMLoader {
             Constructor<? extends Transformer> constructor = transformerClass.getConstructor();
             if (constructor == null) continue;
             Object instance = constructor.newInstance();
-            Method methodTransform = Transformer.class.getMethod("transform", String.class, String.class, byte[].class);
+            Method methodTransform = Transformer.class.getMethod("transform", byte[].class, String.class, String.class);
 
             if (methodTransform == null) continue;
 

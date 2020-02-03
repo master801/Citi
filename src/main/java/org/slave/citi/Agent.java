@@ -56,14 +56,14 @@ public final class Agent {
                 Transformer transformer = constructor.newInstance();
 
                 instrumentation.addTransformer(
-                        (loader, className, classBeingRedefined, protectionDomain, classfileBuffer) -> transformer.transform(classfileBuffer, className, className)
+                        (loader, className, classBeingRedefined, protectionDomain, classfileBuffer) -> transformer.transform(classfileBuffer, className, className),
+                        true
                 );
             } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
                 Agent.LOGGER_CITI_AGENT.info("Caught exception while adding transformer!");
                 Agent.LOGGER_CITI_AGENT.info("Exception: " + e.toString());
             }
         }
-
 
         try {
             CitiASMLoader.INSTANCE.loadTransformers(instrumentation);
@@ -76,15 +76,11 @@ public final class Agent {
     private static boolean loadLibraries() {
         if (Citi.getDirectoryCitiLibs().exists()) {
             File[] files = Citi.getDirectoryCitiLibs().listFiles((dir, name) -> name.trim().toLowerCase().endsWith(".jar"));
-            if (files != null) {
+            if (files != null && files.length > 0) {
                 Method addURL = null;
                 if (Agent.class.getClassLoader() instanceof URLClassLoader) {
                     try {
-                        addURL = URLClassLoader.class.getDeclaredMethod(
-                                "addURL",
-
-                                URL.class
-                        );
+                        addURL = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
                         addURL.setAccessible(true);
                     } catch (NoSuchMethodException e) {
                         e.printStackTrace();
@@ -97,11 +93,7 @@ public final class Agent {
 
                 for (File file : files) {
                     try {
-                        addURL.invoke(
-                                Agent.class.getClassLoader(),
-
-                                file.toURI().toURL()
-                        );
+                        addURL.invoke(Agent.class.getClassLoader(), file.toURI().toURL());
                     } catch (IllegalAccessException | InvocationTargetException | MalformedURLException e) {
                         System.out.println("Caught exception while adding library file! Exception: " + e.toString());
                         return false;

@@ -47,9 +47,7 @@ public final class CitiModContainer {
     private String version;
 
     void injectData() {
-        if (mainClass == null) {
-            return;
-        }
+        if (mainClass == null) return;
 
         try {
             Constructor<?> constructor = mainClass.getDeclaredConstructor();
@@ -65,9 +63,7 @@ public final class CitiModContainer {
         for(Method method : mainClass.getDeclaredMethods()) {
             if (EventStage.class.isAssignableFrom(method.getParameterTypes()[0])) {
                 Stage stage = Stage.from(method.getParameterTypes()[0]);
-                if (stage == null) {
-                    continue;
-                }
+                if (stage == null) continue;
                 eventMethods.put(stage, method);
             }
         }
